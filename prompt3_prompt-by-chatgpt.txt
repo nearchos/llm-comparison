@@ -1,0 +1,239 @@
+
+You are a senior Flutter game developer and technical writer. Your task is to generate a fully working Flappy Bird clone written in Flutter (Dart).
+
+Follow ALL requirements carefully. The most important requirement is that the generated project must compile and run with minimal or zero manual fixes.
+
+🎯 Primary Objectives (ordered by priority)
+1. Completeness and Buildability (CRITICAL)
+
+The project must:
+
+Be a complete Flutter project
+
+Compile and run immediately after:
+
+flutter pub get
+flutter run
+
+
+Include ALL required files:
+
+pubspec.yaml
+
+lib/main.dart
+
+Any additional Dart files
+
+Asset files if used
+
+Include correct asset declarations in pubspec.yaml
+
+Include clear folder structure
+
+Avoid placeholders like “implement later”
+
+Avoid missing imports or undefined classes
+
+Before finalizing, you must perform a self-verification pass to confirm all files are consistent.
+
+2. Minimize External Dependencies
+
+Use native Flutter and Dart libraries only
+
+Avoid external packages unless absolutely necessary
+
+If a package is used:
+
+Justify why it is unavoidable
+
+Prefer widely supported, lightweight packages
+
+Prefer:
+
+CustomPainter
+
+AnimationController
+
+GestureDetector
+
+Ticker
+
+Built-in audio only if easily available
+
+3. Gameplay Fidelity
+
+Gameplay must resemble original Flappy Bird:
+
+Required mechanics:
+
+Tap / click causes bird to flap upward
+
+Constant gravity pulls bird downward
+
+Horizontally moving pipes
+
+Randomized vertical pipe gaps
+
+Collision detection:
+
+Bird vs pipes
+
+Bird vs ground
+
+Score increments when passing pipes
+
+Game over screen
+
+Restart functionality
+
+Increasing difficulty over time (optional but encouraged)
+
+Physics should feel reasonably similar to the original.
+
+4. Graphics Fidelity
+
+Graphics should resemble original Flappy Bird style:
+
+Preferred approach:
+
+Generate graphics programmatically using Flutter drawing APIs
+
+Acceptable alternative:
+
+Provide image assets AND include them in project structure
+
+Requirements:
+
+Pixel-style or retro aesthetic
+
+Animated bird wing flap
+
+Scrolling background
+
+Ground scrolling effect
+
+Pipes resembling original layout
+
+If images are used:
+
+Provide actual image files as base64 or binary data
+
+Include instructions showing exactly where to place them
+
+5. Sound (Optional)
+
+If implemented:
+
+Use minimal dependency solution
+
+Include:
+
+Flap sound
+
+Score sound
+
+Collision sound
+
+Must not break build if removed
+
+🧱 Architectural Requirements
+
+Use a clean but simple architecture:
+
+Separate files for:
+
+Game state
+
+Bird logic
+
+Pipe logic
+
+Rendering
+
+Collision detection
+
+Avoid over-engineering
+
+Avoid game engines like Flame unless absolutely required (prefer NOT to use)
+
+🗂 Required Output Structure
+
+You MUST output content in this exact order:
+
+1. Project Folder Tree
+
+Show full folder structure.
+
+2. pubspec.yaml
+
+Provide full working file.
+
+3. All Dart Source Files
+
+Each file must:
+
+Be complete
+
+Include imports
+
+Include comments explaining key logic
+
+4. Assets (If Any)
+
+Provide:
+
+File paths
+
+Actual asset data or generation code
+
+5. Build & Run Instructions
+
+Provide exact commands.
+
+6. Self-Verification Checklist
+
+Confirm:
+
+Project compiles
+
+Assets declared correctly
+
+No missing references
+
+No external dependencies unless justified
+
+⚠️ Important Constraints
+
+DO NOT:
+
+Skip files
+
+Use pseudocode
+
+Reference unavailable assets
+
+Assume user knowledge
+
+Use partial snippets
+
+DO:
+
+Provide copy-paste ready files
+
+Prefer single-screen gameplay
+
+Keep code readable and documented
+
+🎮 Target Platforms
+
+Ensure compatibility with:
+
+Android
+
+iOS
+
+Desktop support is optional but welcome
+
+🧪 Quality Expectations
+
+The final result should resemble a small but polished open-source project.

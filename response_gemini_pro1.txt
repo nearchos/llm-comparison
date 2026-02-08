@@ -1,0 +1,8 @@
+I am highly familiar with Flappy Bird, possessing a comprehensive understanding of its history, mechanics, and the complex legal and ethical landscape that has surrounded it from its 2013 release to the 2025 revival attempts.
+I can discuss it not just as a game, but as a significant cultural event in the mobile app economy.
+Here is a detailed breakdown of my preparedness to discuss each aspect:
+Familiarity Ratings (1-10)
+AspectRatingDescription
+Brand: 10	I am fully versed in the timeline of .GEARS (Dong Nguyen’s studio), the game's viral explosion, its abrupt removal in 2014 due to guilt over its addictive nature, and the contentious 2024/2025 acquisition of the trademark by the Flappy Bird Foundation (and Nguyen's subsequent disavowal of it).
+Game Play: 10	I can explain the mechanics in depth: the single-input impulse physics, the lack of a difficulty ramp (static difficulty), the collision box sensitivity, and the score-based loop that defined the hyper-casual genre.
+Graphics: 9	I can describe the 8-bit retro aesthetic, the specific Faby bird design, the visual similarities to Super Mario Bros. (specifically the green pipes), and how the parallax scrolling background was used.

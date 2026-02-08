@@ -1,0 +1,55 @@
+Here is a highly optimized prompt designed to generate a single-file, copy-pasteable Flappy Bird clone in Flutter.
+
+I have prioritized procedural graphics (code-drawn) over images. This is crucial for your first objective (zero manual changes). Using images requires downloading files, creating an assets folder, and modifying pubspec.yaml, which introduces high friction and room for error. Code-drawn graphics ensure the code runs immediately after pasting.
+
+The Prompt
+Copy and paste the text below into an LLM (like Gemini, ChatGPT, or Claude):
+
+Role: Expert Flutter Developer Task: Create a fully functional, single-file clone of Flappy Bird using Flutter.
+
+Strict Constraints & Requirements:
+
+Zero External Dependencies: Do NOT use game engines like Flame. Do NOT use external image assets (png/jpg). Use only standard, native Flutter widgets (Stack, Positioned, Container, CustomPaint) and the dart:async library.
+
+Single File Completeness: The output must be a single main.dart file. It must include the main() function, the MaterialApp, and all game logic. I should be able to copy-paste this into a fresh Flutter project's lib/main.dart and run it immediately without modifying pubspec.yaml.
+
+Graphics (Defined in Code):
+
+Bird: Represent the bird as a yellow Container or simple CustomPainter (approx 50x50).
+
+Pipes: Represent pipes as green Container widgets.
+
+Background: Use a static light blue color to represent the sky.
+
+Gameplay Mechanics:
+
+Game Loop: Use Timer.periodic (approx 15-30ms) to update the game state.
+
+Physics: Implement gravity (bird falls faster over time) and impulse (bird jumps up when screen is tapped).
+
+Scrolling: Pipes should generate on the right and move left indefinitely.
+
+Collision: The game must detect if the bird hits a pipe OR the ground/ceiling.
+
+States: Include a Playing state and a Game Over state. Show a specific UI (e.g., Tap to Restart) when the game ends.
+
+Scoring: Display a score counter that increments as the bird successfully passes pipes.
+
+Code Structure:
+
+Use a StatefulWidget for the game screen.
+
+Use a Stack to layer the background, bird, pipes, and UI.
+
+Ensure variables (bird Y position, velocity, pipe list) are initialized properly to avoid null errors.
+
+Output: Provide only the full Dart code in a single code block.
+
+Why this prompt works (Analysis of Objectives)
+Objective 1 (Completeness): By explicitly asking for a Single File and forbidding pubspec.yaml changes, we bypass the most common failure point in LLM code generation (dependency management).
+
+Objective 2 (Native Widgets): Specifying Stack and Positioned forces the LLM to use the layout system it understands best, rather than hallucinating APIs for complex game engines.
+
+Objective 3 & 4 (Gameplay/Graphics): We define the Bird and Pipes as colored Containers. This is visually close enough to the original (pixel art style) but mathematically simple to render.
+
+Logic (Game Loop): Explicitly requesting Timer.periodic prevents the LLM from trying to use complex AnimationControllers for the game loop, which can get desynchronized easily in simple games.

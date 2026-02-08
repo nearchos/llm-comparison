@@ -1,0 +1,10 @@
+Here is the complete, single-file Flutter code for the Flappy Bird clone.
+
+How to Run
+Create a new Flutter project: flutter create flappy_clone
+
+Open lib/main.dart.
+
+Delete everything in the file and paste the code below.
+
+Run the app (F5 or flutter run).

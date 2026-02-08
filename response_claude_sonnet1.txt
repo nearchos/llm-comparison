@@ -1,0 +1,8 @@
+I'm quite familiar with Flappy Bird! Here's my assessment of my preparedness to discuss different aspects:
+Brand: 8/10
+I know the cultural phenomenon well - created by Dong Nguyen in 2013, became massively viral, was controversially removed from app stores in early 2014 despite (or because of) its success, spawned countless clones, and became a significant moment in mobile gaming history. I can discuss its cultural impact, the controversy around its removal, and its legacy.
+Gameplay: 9/10
+I'm very familiar with the mechanics - it's an extremely simple one-button game where you tap to make a bird flap upward, navigating through gaps between green pipes. The difficulty comes from the precise timing needed and unforgiving physics. I can discuss the game loop, difficulty curve, scoring system, and why the simple-yet-frustrating mechanics were so compelling.
+Graphics: 7/10
+I know the visual style - retro pixel art aesthetic reminiscent of 8-bit games, simple sprite-based graphics with the bird, green pipes clearly inspired by Super Mario Bros., scrolling background with clouds and city skyline. However, I haven't seen the actual game in my training data (just descriptions and discussions), so I can describe the style and elements but might miss some specific visual details compared to someone who's actually played it.
+Would you like me to elaborate on any of these aspects?

@@ -1,0 +1,74 @@
+DoneHere's a comprehensive prompt designed to generate a complete, working Flappy Bird clone:
+
+PROMPT:
+Create a complete, fully functional Flappy Bird clone in Flutter that can be compiled and run immediately without any manual modifications. Follow these requirements strictly:
+CRITICAL REQUIREMENTS:
+
+Provide ALL code in a single, complete main.dart file
+Use ONLY native Flutter widgets and packages - no external dependencies beyond the Flutter SDK
+All graphics must be drawn programmatically using CustomPainter - NO image assets
+The code must be production-ready and require zero modifications to run
+
+GAMEPLAY MECHANICS:
+
+Tap anywhere to make the bird flap upward
+Gravity constantly pulls the bird downward
+Bird must navigate through gaps between pipes
+Collision with pipes, ground, or ceiling ends the game
+Score increases by 1 for each pipe successfully passed
+Game over screen with score display and restart button
+Pipes should scroll from right to left continuously
+Gap between pipes should be consistent and challenging but fair
+Physics should feel similar to original Flappy Bird (responsive but difficult)
+
+VISUAL REQUIREMENTS (all code-based using CustomPainter):
+
+Yellow bird with simple rounded body and wing
+Green pipes similar to Super Mario Bros style
+Light blue sky background
+Ground/floor at bottom with a different color
+Score displayed at top center
+Simple game over overlay with final score and Tap to Restart text
+
+TECHNICAL IMPLEMENTATION:
+
+Use a game loop with setState() or AnimationController for updates
+Implement proper collision detection (rectangle/circle collision)
+Bird should have rotation that changes based on velocity (tilts up when flapping, tilts down when falling)
+Smooth 60 FPS animation
+Responsive tap detection across entire screen
+Proper game state management (playing, game over)
+Random but consistent pipe gap positioning
+
+CODE STRUCTURE:
+Organize the code with:
+
+Main game widget
+CustomPainter classes for bird, pipes, and background
+Game logic class or methods for physics, collision, scoring
+Clear constants for tuning (gravity, jump velocity, pipe speed, gap size)
+
+Provide the complete, ready-to-run code now. Include helpful comments explaining key sections.
+
+Alternative version if you want to allow sound (optional):
+Add this section to the prompt above:
+OPTIONAL SOUND (if easily implementable):
+
+If you can add sound effects using only audioplayers package (or similar minimal dependency), include:
+
+Wing flap sound on tap
+Score ding when passing pipe
+Crash sound on collision
+
+
+Provide simple instructions for adding the audio files if needed
+Sound should be optional and the game must work perfectly without it
+
+
+This prompt should generate a working game because it:
+
+Emphasizes completeness and zero-modification requirement
+Specifies single-file delivery for simplicity
+Explicitly requests CustomPainter for graphics (avoiding asset dependency)
+Provides detailed gameplay and physics specifications
+Requests clear code structure with constants for easy tuning

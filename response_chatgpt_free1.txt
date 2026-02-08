@@ -1,0 +1,12 @@
+Here’s how well I’m prepared to discuss Flappy Bird across those aspects (1 = least familiar, 10 = most familiar):
+
+Brand: 8/10
+I’m very familiar with Flappy Bird’s history, creator (Dong Nguyen / .GEARS), cultural impact, viral rise in 2013–2014, monetization approach, and its role in mobile gaming trends. Slightly less than 10 only because I don’t have internal company/brand strategy documents beyond public information.
+
+Gameplay: 10/10
+I’m highly familiar with the mechanics, rules, difficulty design, physics model, scoring, user interaction patterns, typical clones/variants, and design analysis (e.g., why it’s addictive or challenging).
+
+Graphics: 9/10
+I’m very familiar with the visual style, sprite design inspiration (retro/8-bit aesthetic), UI layout, animation approach, and technical implementation patterns. Not a full 10 only because I don’t have access to original source asset files or proprietary development notes.
+
+If you want, I can also evaluate Flappy Bird from other angles like monetization, UX psychology, or technical implementation.

@@ -1,0 +1,64 @@
+Here is a prompt engineered to maximize the likelihood of generating a complete, runnable Flappy Bird clone in Flutter, prioritizing your stated objectives.
+
+Prompt for LLM:
+
+"Act as an expert Flutter developer. Your task is to generate the full source code for a Flappy Bird clone that is a complete, runnable Flutter project.
+
+CRITICAL REQUIREMENTS (in order of priority):
+
+Completeness & Zero Configuration: The output must be a single, ready-to-run main.dart file OR a complete, minimal project structure described file-by-file. The code must compile, build, and run on a standard Flutter environment (SDK version >=3.19) without any manual modifications, missing dependencies, or syntax errors. Assume the project is created via flutter create flappy_clone.
+
+Minimal Dependencies: Use ZERO external packages/pub.dev libraries. Rely exclusively on the native Flutter SDK (dart:math, dart:async, dart:ui) and core Flutter widgets (GestureDetector, CustomPaint, AnimationController, SizedBox, etc.). Do not use flame or other game engines. Do not use any pubspec.yaml dependencies.
+
+Faithful Gameplay:
+
+Implement core physics: a bird that falls with gravity and jumps with a tap.
+
+Generate infinitely scrolling pairs of pipes (top and bottom) with a random gap.
+
+Precise collision detection between the bird and pipes/ground/ceiling.
+
+A running score that increments when the bird passes a pipe pair.
+
+Game states: READY, PLAYING, GAME_OVER.
+
+Tapping anywhere should jump during PLAYING or restart the game during GAME_OVER.
+
+Original-like Graphics (Code-First): DO NOT use external image files (.png, .jpg). Define ALL visual elements (bird, pipes, background) programmatically using CustomPaint and Canvas drawing commands (e.g., drawRect, drawCircle, drawPath). Use colors and shapes that closely mimic the original Flappy Bird: a yellow bird (circle/rounded shape), green pipes, blue sky background, white ground rectangle, simple score display.
+
+Sound (Optional): If you include sound, you must generate the required audio files as Base64-encoded strings within the Dart code and provide the mechanism to play them using dart:ui's AudioCache or similar without external packages. If this is too complex, omit sound entirely. It is better to have a silent, working game than to break requirement #1.
+
+IMPLEMENTATION INSTRUCTIONS:
+
+Structure the game loop using WidgetsBinding.instance.addPostFrameCallback or a Timer.periodic inside a StatefulWidget's initState.
+
+Use an AnimationController linked to a TickerProvider (use SingleTickerProviderStateMixin) for smooth frame updates.
+
+Keep all game state (bird position, velocity, pipe positions, score) within the widget's State using setState for updates.
+
+For collision, use simple rectangle or circle bounding box logic.
+
+Provide the complete code for lib/main.dart. If other files are absolutely necessary (e.g., a widgets/game_painter.dart), define them as separate, complete Dart code blocks in your answer, specifying their exact file path.
+
+OUTPUT FORMAT:
+Start your response with: PROJECT ROOT: lib/main.dart.
+Then, provide the complete, final Dart source code that can be directly copied into the lib/main.dart file of a new Flutter project and run with flutter run.
+
+Your generated code will be judged first on its ability to run without error, and second on its adherence to the other requirements."
+
+Why this prompt works:
+
+Explicit Priority & Success Criteria: It clearly states that compilability is the top goal, setting the LLM's objective function.
+
+Constraint Enforcement: It explicitly forbids common shortcuts (external packages, image files) that would violate objectives 1 and 2.
+
+Solution Guidance: It suggests specific Flutter-native techniques (CustomPaint, AnimationController, post-frame callbacks) to nudge the LLM toward a correct architecture without external engines.
+
+Risk Mitigation for Graphics: By mandating CustomPaint and forbidding images, it eliminates the need for the LLM to generate or reference external asset files, which is a major source of incomplete outputs.
+
+Sound Handling: It gives a safe "out" to omit sound, preventing the LLM from adding complex, error-prone audio code that would break the primary goal.
+
+Output Format Clarity: The PROJECT ROOT: instruction helps the LLM structure its output as a deployable artifact, not just a code snippet.
+
+You can feed this prompt directly to a capable LLM. For the best results, use a model with strong reasoning and code generation capabilities, such as DeepSeek Coder, GPT-4, or Claude 3.5 Sonnet.
+

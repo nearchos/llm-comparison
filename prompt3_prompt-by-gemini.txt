@@ -1,0 +1,33 @@
+pubspec.yaml.
+
+Graphics (Defined in Code):
+
+Bird: Represent the bird as a yellow Container or simple CustomPainter (approx 50x50).
+
+Pipes: Represent pipes as green Container widgets.
+
+Background: Use a static light blue color to represent the sky.
+
+Gameplay Mechanics:
+
+Game Loop: Use Timer.periodic (approx 15-30ms) to update the game state.
+
+Physics: Implement gravity (bird falls faster over time) and impulse (bird jumps up when screen is tapped).
+
+Scrolling: Pipes should generate on the right and move left indefinitely.
+
+Collision: The game must detect if the bird hits a pipe OR the ground/ceiling.
+
+States: Include a Playing state and a Game Over state. Show a specific UI (e.g., Tap to Restart) when the game ends.
+
+Scoring: Display a score counter that increments as the bird successfully passes pipes.
+
+Code Structure:
+
+Use a StatefulWidget for the game screen.
+
+Use a Stack to layer the background, bird, pipes, and UI.
+
+Ensure variables (bird Y position, velocity, pipe list) are initialized properly to avoid null errors.
+
+Output: Provide only the full Dart code in a single code block.
