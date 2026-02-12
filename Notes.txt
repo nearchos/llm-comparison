@@ -1,4 +1,6 @@
-The ChatGPT does not guide you to create a Flutter project and then add/edit the code. As a result, the project does not launch after you follow the instructions: flutter pub get and flutter run
+The ChatGPT response does not guide you to create a Flutter project and then add/edit the code. As a result, the project does not launch after you follow the instructions: flutter pub get and flutter run.\
+After creating the project manually, and copying the files, the project launches as a Web app.
+The resulting project is not functional: the player loses as soon as the game starts, with no opportunity for reacting.
 
 The DeepSeek does not guide you to create a project, but simply a main.dart containing the game code.
 Manual action: "flutter create flappy_deepseek_prompt"
