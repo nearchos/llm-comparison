@@ -1,0 +1,14 @@
+Create a complete, compilable Flutter project for a Flappy Bird clone. Use native Flutter widgets and minimize external libraries.
+Gameplay:
+Tap to flap wings
+Bird falls due to gravity
+Pipes spawn at intervals, scroll left
+Collision with pipes or ground ends game
+Score points for passing pipes
+Graphics (in-code definitions preferred, or provide necessary image assets):
+Pixelated bird (flapping animation)
+Green pipes
+Daytime sky background
+Ground texture
+Nice-to-haves: background music, flap/score/crash sounds.
+

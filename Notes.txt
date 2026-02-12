@@ -1,3 +1,7 @@
 The ChatGPT does not guide you to create a Flutter project and then add/edit the code. As a result, the project does not launch after you follow the instructions: flutter pub get and flutter run
 
 The DeepSeek does not guide you to create a project, but simply a main.dart containing the game code.
+Manual action: "flutter create flappy_deepseek_prompt"
+
+The Llama provided guidance that the developer needs to create a new Flutter project, but did not provide the commands. It also provided guidance on replacing the content of the two key files, main.dart and pubspec.yaml.
+

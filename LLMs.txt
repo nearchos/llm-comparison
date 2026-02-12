@@ -1,4 +1,5 @@
-Gemini 3 - PRO
-Claude Sonnet 4.5 - extended thinking
-ChatGPT - GPT-5.2 - free version
-DeepSeek
+Gemini 3 - PRO				(https://gemini.google)
+Claude Sonnet 4.5 - extended thinking	(https://claude.ai/)
+ChatGPT - GPT-5.2 - free version	(https://chatgpt.com/)
+DeepSeek 				(https://chat.deepseek.com/)
+Llama 4 				(https://meta.ai)
