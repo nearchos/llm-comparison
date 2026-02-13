@@ -2,96 +2,614 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
+        <title>LLM Comparison for coding a game</title>
         <style>
             th {
                 border-bottom: 2px solid black;
-                border-top: 1px solid black;
+                background-color: #f0f0f0;
             }
             tr, td {
                 border-bottom: 1px solid #ccc;
+                border-left: 1px solid #ccc;
             }
         </style>
     </head>
     <body>
         <h1>LLM Comparison for coding a game</h1>
-    </body>
 
     <table>
-        <caption>Comparison of LLMs for coding <a href="https://en.wikipedia.org/wiki/Flappy_Bird">Flappy Bird</a></caption>
+        <caption>Comparison of LLMs for coding <a href="https://en.wikipedia.org/wiki/Flappy_Bird">Flappy Bird</a> (data collected 9 Feb - <span style="background-color: #ff0;">...</span> 2026)</caption>
         <tr>
-            <th>LLM</th>
-            <th>Self reflection (<a href="prompt1-familiarity.txt" target="_blank">prompt</a>)</th>
-            <th>Prompt creation (<a href="prompt2-create-prompt.txt" target="_blank">prompt</a>)</th>
-            <th>Code generation</th>
+            <th rowspan="2">LLM</th>
+            <th rowspan="2">Self reflection (<a href="prompt1-familiarity.txt" target="_blank">prompt</a>)</th>
+            <th rowspan="2">Prompt creation (<a href="prompt2-create-prompt.txt" target="_blank">prompt</a>)</th>
+            <th colspan="6" style="border-bottom: none;">Code generation</th>
         </tr>
         <tr>
-            <td><a href="https://chat.openai.com/" target="_blank">ChatGPT</a></td>
-            <td>
-                Brand: 8/10
-                <br>
-                Gameplay: 10/10
-                <br>
-                Graphics: 9/10
-            </td>
-            <td><a href="prompt3_prompt-by-chatgpt.txt" target="_blank">prompt</a></td>
-            <td>
-                <table>
-                    <tr>
-                        <td>
-                            ChatGPT prompt
-                            <br>
-                            <a href="response_chatgpt_free3.txt" target="_blank">Response</a>
-                            <br>
-                            <a href="screenshots/chatgpt_chatgpt.png" target="_blank"><img src="screenshots/chatgpt_chatgpt.png" width="100"/></a>
-                            <br>
-                            <em>Notes</em>
-                            The ChatGPT response does not guide you to create a Flutter project and then add/edit the code.
-                            <br>
-                            As a result, the project does not launch after you follow the instructions: <code>flutter pub get</code> and <code>flutter run</code>.
-                            <br>
-                            After manually creating the project, and copying the files over, the project launches as a Web app.
-                            The resulting project is not functional: the player loses as soon as the game starts, with no opportunity for reacting.
+            <th>Prompt</th>
+            <th>Response</th>
+            <th>Notes</th>
+            <th>Screenshot</th>
+            <th>Live game</th>
+            <th>Score</th>
+        </tr>
 
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Claude prompt
-                            <br>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            DeepSeek prompt
-                            <br>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Gemini prompt
-                            <br>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Meta Llama prompt
-                            <br>
-                        </td>
-                    </tr>
-                </table>
-            </td>    
-        </tr>
+
+
         <tr>
-            <td>LLM B</td>
-            <td>Medium</td>
-            <td>Moderate</td>
-            <td>Medium</td>
+            <td rowspan="5">
+                <a href="https://chat.openai.com/" target="_blank">ChatGPT</a>
+            </td>
+            <td rowspan="5">
+                Summary:
+                <ul>
+                    <li>Brand: 8/10</li>
+                    <li>Gameplay: 10/10</li>
+                    <li>Graphics: 9/10</li>
+                </ul>
+                <a href="response_chatgpt_free1.txt" target="_blank">Full response</a>
+            </td>
+            <td rowspan="5">
+                <a href="prompts/prompt3_generated-by-chatgpt.txt" target="_blank">Prompt</a>
+            </td>
+
+            <td style="background-color: #fffff0;">
+                ChatGPT prompt
+            </td>
+            <td>
+                <a href="response_chatgpt_free3.txt" target="_blank">View response</a>
+            </td>
+            <td>
+                The provided response does not provide instructions for creating a Flutter project and then add/edit the code accordingly.
+                <br>
+                <span style="color:red;">Penalty 1: the developer must manually create the project, and copy the files over.</span>
+                <br>
+                <span style="color:red;">Penalty 2: Once launched, the game is not functional: the player loses as soon as the game starts, with no chance to react.</span>
+            </td>
+            <td>
+                <a href="screenshots/chatgpt_chatgpt.png" target="_blank"><img src="screenshots/chatgpt_chatgpt.png" width="100"/></a>
+            </td>
+            <td>
+                <a href="" target="_blank">View live game</a>
+            </td>
+            <td>
+                Score...
+            </td>
         </tr>
+
         <tr>
-            <td>LLM C</td>
-            <td>Low</td>
-            <td>Slow</td>
-            <td>High</td>
+            <td>
+                Claude prompt
+            </td>
+            <td>
+                View response
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+                View live game
+            </td>
+            <td>
+                Score...
+            </td>
         </tr>
+
+        <tr>
+            <td>
+                DeepSeek prompt
+            </td>
+            <td>
+                View response
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+                View live game
+            </td>
+            <td>
+                Score...
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Gemini prompt
+            </td>
+            <td>
+                View response
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+                View live game
+            </td>
+            <td>
+                Score...
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Meta Llama
+            </td>
+            <td>
+                View response
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+                View live game
+            </td>
+            <td>
+                Score...
+            </td>
+        </tr>
+
+
+
+        <tr>
+            <td rowspan="5">
+                <a href="https://claude.ai/" target="_blank">Claude</a>
+            </td>
+            <td rowspan="5">
+                 Summary:
+                <ul>
+                    <li>Brand: 8/10</li>
+                    <li>Gameplay: 9/10</li>
+                    <li>Graphics: 7/10</li>
+                </ul>
+                <a href="response_claude_sonnet1.txt" target="_blank">Full response</a>
+           </td>
+            <td rowspan="5">
+                <a href="prompts/prompt3_generated-by-claude.txt" target="_blank">Prompt</a>
+            </td>
+
+            <td>
+                ChatGPT prompt
+            </td>
+            <td>
+                View response
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+                View live game
+            </td>
+            <td>
+                Score...
+            </td>
+        </tr>
+
+        <tr>
+            <td style="background-color: #fffff0;">
+                Claude prompt
+            </td>
+            <td>
+                <a href="response_claude_sonnet3.txt" target="_blank">View response</a>
+            </td>
+            <td>
+            </td>
+            <td>
+                <a href="screenshots/claude_claude.png" target="_blank"><img src="screenshots/claude_claude.png" width="100"/></a>
+            </td>
+            <td>
+                <a href="" target="_blank">View live game</a>
+            </td>
+            <td>
+                Score...
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                DeepSeek prompt
+            </td>
+            <td>
+                View response
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+                View live game
+            </td>
+            <td>
+                Score...
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Gemini prompt
+            </td>
+            <td>
+                View response
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+                View live game
+            </td>
+            <td>
+                Score...
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Meta Llama
+            </td>
+            <td>
+                View response
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+                View live game
+            </td>
+            <td>
+                Score...
+            </td>
+        </tr>
+
+
+
+
+        <tr>
+            <td rowspan="5">
+                <a href="https://chat.deepseek.com/" target="_blank">DeepSeek</a>
+            </td>
+            <td rowspan="5">
+                 Summary:
+                <ul>
+                    <li>Brand: 8/10</li>
+                    <li>Gameplay: 9/10</li>
+                    <li>Graphics: 7/10</li>
+                </ul>
+                <a href="response_deepseek_deepthink1.txt" target="_blank">Full response</a>
+           </td>
+            <td rowspan="5">
+                <a href="prompts/prompt3_generated-by-deepseek.txt" target="_blank">Prompt</a>
+            </td>
+
+            <td>
+                ChatGPT prompt
+            </td>
+            <td>
+                View response
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+                View live game
+            </td>
+            <td>
+                Score...
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Claude prompt
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+                Score...
+            </td>
+        </tr>
+
+        <tr>
+            <td style="background-color: #fffff0;">
+                DeepSeek prompt
+            </td>
+            <td>
+                <a href="response_deepseek_deepthink3.txt" target="_blank">View response</a>
+            </td>
+            <td>
+            </td>
+            <td>
+                <a href="screenshots/deepseek_deepseek.png" target="_blank"><img src="screenshots/deepseek_deepseek.png" width="100"/></a>
+            </td>
+            <td>
+                <a href="" target="_blank">View live game</a>
+            </td>
+            <td>
+                Score...
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Gemini prompt
+            </td>
+            <td>
+                View response
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+                View live game
+            </td>
+            <td>
+                Score...
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Meta Llama
+            </td>
+            <td>
+                View response
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+                View live game
+            </td>
+            <td>
+                Score...
+            </td>
+        </tr>
+
+
+
+
+        <tr>
+            <td rowspan="5">
+                <a href="https://gemini.google" target="_blank">Gemini</a>
+            </td>
+            <td rowspan="5">
+                 Summary:
+                <ul>
+                    <li>Brand: 10/10</li>
+                    <li>Gameplay: 10/10</li>
+                    <li>Graphics: 9/10</li>
+                </ul>
+                <a href="response_gemini_pro1.txt" target="_blank">Full response</a>
+           </td>
+            <td rowspan="5">
+                <a href="prompts/prompt3_generated-by-gemini.txt" target="_blank">Prompt</a>
+            </td>
+
+            <td>
+                ChatGPT prompt
+            </td>
+            <td>
+                View response
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+                <a href="" target="_blank">View live game</a>
+            </td>
+            <td>
+                Score...
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Claude prompt
+            </td>
+            <td>
+                View response
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+                View live game
+            </td>
+            <td>
+                Score...
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                DeepSeek prompt
+            </td>
+            <td>
+                View response
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+                View live game
+            </td>
+            <td>
+                Score...
+            </td>
+        </tr>
+
+        <tr>
+            <td style="background-color: #fffff0;">
+                Gemini prompt
+            </td>
+            <td>
+                <a href="response_gemini_pro3.txt" target="_blank">View response</a>
+
+            </td>
+            <td>
+            </td>
+            <td>
+                <a href="screenshots/gemini_gemini.png" target="_blank"><img src="screenshots/gemini_gemini.png" width="100"/></a>
+            </td>
+            <td>
+                View live game
+            </td>
+            <td>
+                Score...
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Meta Llama
+            </td>
+            <td>
+                View response
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+                View live game
+            </td>
+            <td>
+                Score...
+            </td>
+        </tr>
+
+
+        <tr>
+            <td rowspan="5">
+                <a href="https://www.meta.ai/" target="_blank">Meta Llama</a>
+            </td>
+            <td rowspan="5">
+                 Summary:
+                <ul>
+                    <li>Brand: 6/10</li>
+                    <li>Gameplay: 8/10</li>
+                    <li>Graphics: 9/10</li>
+                </ul>
+                <a href="response_meta_llama1.txt" target="_blank">Full response</a>
+           </td>
+            <td rowspan="5">
+                <a href="prompts/prompt3_generated-by-meta_llama.txt" target="_blank">Prompt</a>
+            </td>
+
+            <td>
+                ChatGPT prompt
+            </td>
+            <td>
+                View response
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+                <a href="" target="_blank">View live game</a>
+            </td>
+            <td>
+                Score...
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Claude prompt
+            </td>
+            <td>
+                View response
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+                View live game
+            </td>
+            <td>
+                Score...
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                DeepSeek prompt
+            </td>
+            <td>
+                View response
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+                View live game
+            </td>
+            <td>
+                Score...
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                Gemini prompt
+            </td>
+            <td>
+                View response
+            </td>
+            <td>
+            </td>
+            <td>
+            </td>
+            <td>
+                View live game
+            </td>
+            <td>
+                Score...
+            </td>
+        </tr>
+
+        <tr>
+            <td style="background-color: #fffff0;">
+                Meta Llama
+            </td>
+            <td>
+                <a href="" target="_blank">View response</a>
+            </td>
+            <td>
+            </td>
+            <td>
+                <a href="screenshots/llama_llama.png" target="_blank"><img src="screenshots/llama_llama.png" width="100"/></a>
+            </td>
+            <td>
+                View live game
+            </td>
+            <td>
+                Score...
+            </td>
+        </tr>
+
+    </table>
+
+    </body>
 </html>
