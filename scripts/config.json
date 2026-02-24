@@ -1,0 +1,34 @@
+{
+    "llms": [
+        {
+            "name": "ChatGPT",
+            "developer": "OpenAI",
+            "version": "GPT-5.2 - free version",
+            "url": "https://chat.openai.com"
+        },
+        {
+            "name": "Claude",
+            "developer": "Anthropic",   
+            "version": "Sonnet 4.5 - extended thinking",
+            "url": "https://claude.ai"
+        },
+        {
+            "name": "DeepSeek",
+            "developer": "DeepSeek",
+            "version": "N/A",
+            "url": "https://chat.deepseek.com"
+        },
+        {
+            "name": "Gemini",
+            "developer": "Google",
+            "version": "Gemini 3 - PRO",
+            "url": "https://gemini.google"
+        },
+        {
+            "name": "Llama",
+            "developer": "Meta",
+            "version": "Llama 4",
+            "url": "https://meta.ai"
+        }
+    ]
+}
