@@ -1,0 +1,137 @@
+{
+    "chatgpt": {
+        "chatgpt": {
+            "brand": 0,
+            "gameplay": 0,
+            "graphics": 0
+        },
+        "claude": {
+            "brand": 0,
+            "gameplay": 0,
+            "graphics": 0
+        },
+        "deepseek": {
+            "brand": 0,
+            "gameplay": 0,
+            "graphics": 0
+        },
+        "gemini": {
+            "brand": 0,
+            "gameplay": 0,
+            "graphics": 0
+        },
+        "llama": {
+            "brand": 0,
+            "gameplay": 0,
+            "graphics": 0
+        }
+    },
+    "claude": {
+        "chatgpt":  {
+            "brand": 0,
+            "gameplay": 0,
+            "graphics": 0
+        },
+        "claude": {
+            "brand": 0,
+            "gameplay": 0,
+            "graphics": 0
+        },
+        "deepseek": {
+            "brand": 0,
+            "gameplay": 0,
+            "graphics": 0
+        },
+        "gemini": {
+            "brand": 0,
+            "gameplay": 0,
+            "graphics": 0
+        },
+        "llama": {
+            "brand": 0,
+            "gameplay": 0,
+            "graphics": 0
+        }
+    },
+    "deepseek": {
+        "chatgpt": {
+            "brand": 0,
+            "gameplay": 0,
+            "graphics": 0
+        },
+        "claude": {
+            "brand": 0,
+            "gameplay": 0,
+            "graphics": 0
+        },
+        "deepseek": {
+            "brand": 0,
+            "gameplay": 0,
+            "graphics": 0
+        },
+        "gemini": {
+            "brand": 0,
+            "gameplay": 0,
+            "graphics": 0
+        },
+        "llama": {
+            "brand": 0,
+            "gameplay": 0,
+            "graphics": 0
+        }
+    },
+    "gemini": {
+        "chatgpt": {
+            "brand": 0,
+            "gameplay": 0,
+            "graphics": 0
+        },
+        "claude": {
+            "brand": 0,
+            "gameplay": 0,
+            "graphics": 0
+        },
+        "deepseek":  {
+            "brand": 0,
+            "gameplay": 0,
+            "graphics": 0
+        },
+        "gemini": {
+            "brand": 0,
+            "gameplay": 0,
+            "graphics": 0
+        },
+        "llama": {
+            "brand": 0,
+            "gameplay": 0,
+            "graphics": 0
+        }
+    },
+    "llama": {
+        "chatgpt": {
+            "brand": 0,
+            "gameplay": 0,
+            "graphics": 0
+        },
+        "claude": {
+            "brand": 0,
+            "gameplay": 0,
+            "graphics": 0
+        },
+        "deepseek": {
+            "brand": 0,
+            "gameplay": 0,
+            "graphics": 0
+        },
+        "gemini": {
+            "brand": 0,
+            "gameplay": 0,
+            "graphics": 0
+        },
+        "llama": {
+            "brand": 0,
+            "gameplay": 0,
+            "graphics": 0
+        }
+    }
+}

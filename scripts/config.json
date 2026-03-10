@@ -2,30 +2,40 @@
     "llms": [
         {
             "name": "ChatGPT",
+            "folder": "chatgpt_free",
+            "id": "chatgpt",
             "developer": "OpenAI",
             "version": "GPT-5.2 - free version",
             "url": "https://chat.openai.com"
         },
         {
             "name": "Claude",
+            "folder": "claude_sonnet",
+            "id": "claude",
             "developer": "Anthropic",   
             "version": "Sonnet 4.5 - extended thinking",
             "url": "https://claude.ai"
         },
         {
             "name": "DeepSeek",
+            "folder": "deepseek_deepthink",
+            "id": "deepseek",
             "developer": "DeepSeek",
             "version": "N/A",
             "url": "https://chat.deepseek.com"
         },
         {
             "name": "Gemini",
+            "folder": "gemini_pro",
+            "id": "gemini",
             "developer": "Google",
             "version": "Gemini 3 - PRO",
             "url": "https://gemini.google"
         },
         {
             "name": "Llama",
+            "folder": "llama",
+            "id": "llama",
             "developer": "Meta",
             "version": "Llama 4",
             "url": "https://meta.ai"

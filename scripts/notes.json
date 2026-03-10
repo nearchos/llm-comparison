@@ -1,0 +1,46 @@
+{
+    "chatgpt": {
+        "chatgpt": [
+            "The ChatGPT response does not guide you to create a Flutter project and then add/edit the code. As a result, the project does not launch after you follow the instructions: 'flutter pub get' and 'flutter run'.",
+            "After creating the project manually, and copying the files, the project launches as a Web app.",
+            "The resulting project is not functional: the player loses as soon as the game starts, with no opportunity for reacting."
+        ],
+        "claude": [],
+        "deepseek": [],
+        "gemini": [],
+        "llama": []
+    },
+    "claude": {
+        "chatgpt": [],
+        "claude": [],
+        "deepseek": [],
+        "gemini": [],
+        "llama": []
+    },
+    "deepseek": {
+        "chatgpt": [],
+        "claude": [],
+        "deepseek": [
+            "DeepSeek does not guide you to create a project, but simply a main.dart containing the game code.",
+            "Manual action used: 'flutter create flappy_deepseek_prompt'"
+        ],
+        "gemini": [],
+        "llama": []
+    },
+    "gemini": {
+        "chatgpt": [],
+        "claude": [],
+        "deepseek": [],
+        "gemini": [],
+        "llama": []
+    },
+    "llama": {
+        "chatgpt": [],
+        "claude": [],
+        "deepseek": [],
+        "gemini": [],
+        "llama": [
+            "The Llama provided guidance that the developer needs to create a new Flutter project, but did not provide the commands. It also provided guidance on replacing the content of the two key files, 'main.dart' and 'pubspec.yaml'."
+        ]
+    }
+}
