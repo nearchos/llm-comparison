@@ -9,4 +9,4 @@ View live page at:
 Build Flutter projects using:
 
 - `flutter build web --base-href /live/<llm>/<prompt-llm>/`
-- for example: `flutter build web --base-href /live/chatgpt/chatgpt/`
+- for example: `flutter build web --base-href /llm-comparison/live/chatgpt/chatgpt/`
