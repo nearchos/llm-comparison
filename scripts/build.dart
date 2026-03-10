@@ -52,7 +52,6 @@ Future<void> main() async {
         var other_prompts = "";
         for(int j  = 0; j < numOfLlms; j++) {
             var prompt = llms[j];
-            print("    ...adding $i:$j -> $llm_name : ${prompt['name']}");
             // create row each LLM prompt
             var prompt_row = llmRowItemTemplate;
             prompt_row = prompt_row.replaceAll("%llm_id%", llm_id);
@@ -66,6 +65,7 @@ Future<void> main() async {
             // check if file exists, if not, replace with placeholder
             var response3Path = "../responses/response_3_${llm_id}_${prompt['id']}.txt";
             bool response3PathExists = File(response3Path).existsSync();
+            print("    ...adding $i:$j -> $llm_name : ${prompt['name']} (response3PathExists: $response3PathExists)");
 
             String response3Html = response3PathExists ?
                 "<a href='responses/response_3_${llm_id}_${prompt['id']}.txt' target='_blank'>View</a>" :
