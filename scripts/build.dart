@@ -63,7 +63,7 @@ Future<void> main() async {
             prompt_row = prompt_row.replaceAll("%url%", prompt['url']);
 
             // check if file exists, if not, replace with placeholder
-            var response3Path = "../responses/response_3_${llm_id}_${prompt['id']}.txt";
+            var response3Path = "../docs/responses/response_3_${llm_id}_${prompt['id']}.txt";
             bool response3PathExists = File(response3Path).existsSync();
             print("    ...adding $i:$j -> $llm_name : ${prompt['name']} (response3PathExists: $response3PathExists)");
 

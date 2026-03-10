@@ -1,0 +1,803 @@
+This is a fantastic challenge! Generating a complete Flutter project with complex game logic and custom graphics in one go is a tall order for an LLM, but I'll do my best to give you a solid foundation that adheres to your requirements.
+
+I'll provide:
+
+A pubspec.yaml
+A main.dart which sets up the game and its states.
+game_assets.dart for visual definitions (CustomPainter for bird, pipes, and background).
+game_logic.dart to handle the core game mechanics, physics, collision, and pipe management.
+game_widgets.dart for the game's UI elements like start screen, score, and game over.
+Since you prefer defining graphics in code, I'll use CustomPainter extensively. This avoids external image assets for most elements, keeping the project lean. For sound, I'll integrate a minimal audio library.
+
+Here's the code. You'll need to create a new Flutter project and then replace the files accordingly.
+
+1. pubspec.yaml
+
+This file defines the project's dependencies and metadata. I've included audioplayers for sound effects, as it's a lightweight and standard choice for Flutter audio.
+
+name: flappy_bird_clone
+description: A Flappy Bird clone made with Flutter.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+version: 1.0.0+1
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+dependencies:
+  flutter:
+    sdk: flutter
+  audioplayers: ^5.2.1 # For sound effects
+  cupertino_icons: ^1.0.2
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/audios/ # Directory for sound files
+25 lines (19 loc) · 490 B
+
+
+
+2. main.dart
+
+This is the entry point of your Flutter application. It sets up the MaterialApp and the main game screen.
+
+// main.dart
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flappy_bird_clone/game_screen.dart';
+void main() {
+  // Ensure Flutter widgets are initialized
+  WidgetsFlutterBinding.ensureInitialized();
+  // Set preferred orientations to portrait only
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
+  runApp(const MyApp());
+}
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flappy Bird',
+      debugShowCheckedModeBanner: false, // Hide debug banner
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const GameScreen(),
+    );
+  }
+}
+31 lines (28 loc) · 790 B
+
+
+
+3. game_screen.dart
+
+This file manages the main game state, coordinates game logic, and handles rendering different parts of the game (bird, pipes, score, background, game over/start screens). It uses TickerProviderStateMixin for animation and game loop.
+
+// game_screen.dart
+import 'dart:async';
+import 'dart:math';
+import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:flappy_bird_clone/game_assets.dart';
+import 'package:flappy_bird_clone/game_logic.dart';
+import 'package:flappy_bird_clone/game_widgets.dart';
+class GameScreen extends StatefulWidget {
+  const GameScreen({super.key});
+  @override
+  State<GameScreen> createState() => _GameScreenState();
+}
+enum GameState { waiting, playing, gameOver }
+class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
+  GameState gameState = GameState.waiting;
+  // Bird properties
+  double birdY = 0; // Y position of the bird (0 is center, -1 top, 1 bottom)
+  double birdVelocity = 0;
+  double birdGravity = -10; // Negative for upward pull, positive for downward pull
+  double birdWidth = 0.1; // Relative width of the bird
+  double birdHeight = 0.1; // Relative height of the bird
+  // Pipe properties
+  List<List<double>> pipes = []; // [pipeX, pipeGapY, pipeHeight]
+  double pipeWidth = 0.2; // Relative width of pipes
+  double pipeGap = 0.4; // Relative gap size between pipes
+  double pipeSpeed = 0.005; // Speed at which pipes move left
+  double pipeInterval = 2; // Time interval for new pipes (in seconds)
+  Timer? pipeGenerationTimer;
+  // Game properties
+  int score = 0;
+  bool isCollided = false;
+  // Animation controller for continuous background scrolling and bird flapping
+  late AnimationController _backgroundController;
+  late Animation<double> _backgroundAnimation;
+  late AnimationController _birdFlapController;
+  late Animation<double> _birdFlapAnimation;
+  // Audio players
+  final AudioPlayer _flapPlayer = AudioPlayer();
+  final AudioPlayer _scorePlayer = AudioPlayer();
+  final AudioPlayer _hitPlayer = AudioPlayer();
+  @override
+  void initState() {
+    super.initState();
+    _initAnimations();
+    _loadSounds();
+  }
+  void _initAnimations() {
+    _backgroundController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 10), // Adjust for desired scroll speed
+    )..repeat();
+    _backgroundAnimation = Tween<double>(begin: 0, end: -1).animate(_backgroundController);
+    _birdFlapController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 150), // Speed of flap
+    )..repeat(reverse: true); // Repeat with reverse for simple flapping up/down
+    _birdFlapAnimation = Tween<double>(begin: -0.01, end: 0.01).animate(_birdFlapController);
+  }
+  Future<void> _loadSounds() async {
+    await _flapPlayer.setSource(AssetSource('audios/flap.mp3'));
+    await _scorePlayer.setSource(AssetSource('audios/score.mp3'));
+    await _hitPlayer.setSource(AssetSource('audios/hit.mp3'));
+    // Lower volume for sound effects
+    _flapPlayer.setVolume(0.5);
+    _scorePlayer.setVolume(0.5);
+    _hitPlayer.setVolume(0.5);
+  }
+  void _startGame() {
+    setState(() {
+      gameState = GameState.playing;
+      birdY = 0;
+      birdVelocity = 0;
+      pipes.clear();
+      score = 0;
+      isCollided = false;
+    });
+    // Start pipe generation
+    pipeGenerationTimer = Timer.periodic(Duration(seconds: pipeInterval.toInt()), (timer) {
+      _generateNewPipe();
+    });
+    // Start game loop
+    Timer.periodic(const Duration(milliseconds: 15), (timer) {
+      if (gameState!= GameState.playing) {
+        timer.cancel();
+        pipeGenerationTimer?.cancel();
+        return;
+      }
+      // Update bird physics
+      birdVelocity += birdGravity * 0.002; // Adjust gravity effect
+      birdY -= birdVelocity * 0.005; // Adjust vertical movement speed
+      // Update pipe positions
+      for (int i = 0; i < pipes.length; i++) {
+        pipes[i][0] -= pipeSpeed;
+      }
+      // Remove off-screen pipes
+      pipes.removeWhere((pipe) => pipe[0] < -pipeWidth);
+      // Collision detection
+      if (GameLogic.checkCollision(
+        birdY,
+        birdWidth,
+        birdHeight,
+        pipes,
+        pipeWidth,
+        pipeGap,
+      )) {
+        if (!isCollided) {
+          isCollided = true;
+          _hitPlayer.resume(); // Play hit sound
+          _gameOver();
+        }
+      }
+      // Ground/Ceiling collision
+      if (birdY > 1 + birdHeight / 2 || birdY < -1 - birdHeight / 2) {
+        if (!isCollided) {
+          isCollided = true;
+          _hitPlayer.resume(); // Play hit sound
+          _gameOver();
+        }
+      }
+      // Score update
+      _updateScore();
+      setState(() {}); // Rebuild the widget to reflect changes
+    });
+  }
+  void _gameOver() {
+    setState(() {
+      gameState = GameState.gameOver;
+      _birdFlapController.stop(); // Stop bird flapping animation on game over
+      pipeGenerationTimer?.cancel(); // Stop generating pipes
+    });
+  }
+  void _restartGame() {
+    setState(() {
+      gameState = GameState.waiting;
+      birdY = 0;
+      birdVelocity = 0;
+      pipes.clear();
+      score = 0;
+      isCollided = false;
+      _birdFlapController.repeat(reverse: true); // Restart bird flapping animation
+    });
+  }
+  void _flap() {
+    if (gameState == GameState.playing) {
+      setState(() {
+        birdVelocity = 0.3; // Give an upward thrust
+        _flapPlayer.resume(); // Play flap sound
+      });
+    } else if (gameState == GameState.waiting) {
+      _startGame();
+    }
+  }
+  void _generateNewPipe() {
+    double pipeX = 1.0; // Start pipes from the right edge
+    double pipeGapY = -0.7 + Random().nextDouble() * 1.4; // Random Y position for the gap (-0.7 to 0.7)
+    pipes.add([pipeX, pipeGapY, pipeHeight]); // pipeX, pipeGapY, initial pipe height (can be adjusted)
+  }
+  void _updateScore() {
+    for (int i = 0; i < pipes.length; i++) {
+      if (pipes[i][0] < birdWidth / 2 && pipes[i][0] > -pipeWidth / 2 &&!GameLogic.hasScoredForPipe(i)) {
+        score++;
+        _scorePlayer.resume(); // Play score sound
+        GameLogic.markPipeAsScored(i);
+        break; // Only score once per pass
+      }
+    }
+  }
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: _flap,
+      child: Scaffold(
+        body: Stack(
+          children: [
+            // Background
+            AnimatedBuilder(
+              animation: _backgroundAnimation,
+              builder: (context, child) {
+                return CustomPaint(
+                  painter: BackgroundPainter(
+                    scrollOffset: _backgroundAnimation.value,
+                  ),
+                  child: Container(),
+                );
+              },
+            ),
+            // Pipes
+           ...pipes.map((pipe) {
+              return PipeWidget(
+                pipeX: pipe[0],
+                pipeY: pipe[1],
+                pipeWidth: pipeWidth,
+                pipeGap: pipeGap,
+              );
+            }).toList(),
+            // Bird
+            AnimatedBuilder(
+              animation: _birdFlapAnimation,
+              builder: (context, child) {
+                return BirdWidget(
+                  birdY: birdY + _birdFlapAnimation.value, // Add flapping animation
+                  birdWidth: birdWidth,
+                  birdHeight: birdHeight,
+                  isFlapping: gameState == GameState.playing,
+                  birdVelocity: birdVelocity,
+                );
+              },
+            ),
+            // Score
+            Align(
+              alignment: Alignment.topCenter,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 80.0),
+                child: ScoreDisplay(score: score),
+              ),
+            ),
+            // Game State Overlays
+            if (gameState == GameState.waiting)
+              GameStartOverlay(onStartGame: _startGame),
+            if (gameState == GameState.gameOver)
+              GameOverOverlay(score: score, onRestartGame: _restartGame),
+          ],
+        ),
+      ),
+    );
+  }
+  @override
+  void dispose() {
+    _backgroundController.dispose();
+    _birdFlapController.dispose();
+    _flapPlayer.dispose();
+    _scorePlayer.dispose();
+    _hitPlayer.dispose();
+    pipeGenerationTimer?.cancel();
+    super.dispose();
+  }
+}
+268 lines (238 loc) · 7.9 KB
+
+
+
+4. game_assets.dart
+
+This file contains all the CustomPainter implementations for drawing the game's visuals (bird, pipes, background). This adheres to your preference for code-defined graphics.
+
+// game_assets.dart
+import 'package:flutter/material.dart';
+import 'dart:math' as math;
+// Constants for pipe sizing (can be adjusted)
+const double pipeHeight = 1.8; // Relative height of the pipe drawing
+// CustomPainter for the bird
+class BirdPainter extends CustomPainter {
+  final double flapOffset; // Used for simple flapping animation
+  final double birdVelocity; // Used for tilting the bird
+  BirdPainter({required this.flapOffset, required this.birdVelocity});
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+     ..color = Colors.yellow.shade700
+     ..style = PaintingStyle.fill;
+    final strokePaint = Paint()
+     ..color = Colors.black
+     ..style = PaintingStyle.stroke
+     ..strokeWidth = 2.0;
+    // Bird body (simple ellipse for now)
+    final double centerX = size.width / 2;
+    final double centerY = size.height / 2 + flapOffset * size.height; // Apply flap
+    final double bodyWidth = size.width * 0.8;
+    final double bodyHeight = size.height * 0.6;
+    // Calculate rotation based on velocity
+    // Higher velocity (upwards) -> tilt up, lower (downwards) -> tilt down
+    final double maxTiltAngle = math.pi / 4; // Max tilt 45 degrees
+    final double tiltAngle = (birdVelocity.clamp(-0.5, 0.5)) * maxTiltAngle; // Clamp velocity for smoother tilt
+    canvas.save();
+    canvas.translate(centerX, centerY);
+    canvas.rotate(tiltAngle); // Apply rotation
+    canvas.translate(-centerX, -centerY);
+    // Body
+    canvas.drawOval(
+      Rect.fromCenter(center: Offset(centerX, centerY), width: bodyWidth, height: bodyHeight),
+      paint,
+    );
+    canvas.drawOval(
+      Rect.fromCenter(center: Offset(centerX, centerY), width: bodyWidth, height: bodyHeight),
+      strokePaint,
+    );
+    // Beak
+    final Path beakPath = Path()
+     ..moveTo(centerX + bodyWidth / 2 * 0.8, centerY)
+     ..lineTo(centerX + bodyWidth / 2 + bodyWidth * 0.2, centerY - bodyHeight * 0.1)
+     ..lineTo(centerX + bodyWidth / 2 + bodyWidth * 0.2, centerY + bodyHeight * 0.1)
+     ..close();
+    canvas.drawPath(beakPath, Paint()..color = Colors.orange.shade700);
+    canvas.drawPath(beakPath, strokePaint);
+    // Eye
+    canvas.drawCircle(Offset(centerX + bodyWidth * 0.2, centerY - bodyHeight * 0.1), size.width * 0.08, Paint()..color = Colors.white);
+    canvas.drawCircle(Offset(centerX + bodyWidth * 0.2, centerY - bodyHeight * 0.1), size.width * 0.08, strokePaint);
+    canvas.drawCircle(Offset(centerX + bodyWidth * 0.2, centerY - bodyHeight * 0.1), size.width * 0.04, Paint()..color = Colors.black);
+    // Wing (simple triangle for flapping effect)
+    final Path wingPath = Path()
+     ..moveTo(centerX - bodyWidth * 0.1, centerY + bodyHeight * 0.1 + (flapOffset * size.height * 0.5))
+     ..lineTo(centerX + bodyWidth * 0.3, centerY - bodyHeight * 0.1 + (flapOffset * size.height * 0.5))
+     ..lineTo(centerX + bodyWidth * 0.1, centerY + bodyHeight * 0.3 + (flapOffset * size.height * 0.5))
+     ..close();
+    canvas.drawPath(wingPath, Paint()..color = Colors.yellow.shade400);
+    canvas.drawPath(wingPath, strokePaint);
+    canvas.restore();
+  }
+  @override
+  bool shouldRepaint(covariant BirdPainter oldDelegate) {
+    return oldDelegate.flapOffset!= flapOffset || oldDelegate.birdVelocity!= birdVelocity;
+  }
+}
+// CustomPainter for pipes
+class PipePainter extends CustomPainter {
+  final double pipeGap; // Relative gap size between pipes
+  final double pipeGapY; // Relative Y position of the gap (center of the gap)
+  PipePainter({required this.pipeGap, required this.pipeGapY});
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+     ..color = Colors.green.shade700
+     ..style = PaintingStyle.fill;
+    final strokePaint = Paint()
+     ..color = Colors.black
+     ..style = PaintingStyle.stroke
+     ..strokeWidth = 2.0;
+    final double pipeWidth = size.width;
+    final double screenHeight = size.height;
+    // Calculate the top and bottom pipe heights based on the gap Y position
+    final double gapHeightPixels = pipeGap * screenHeight;
+    final double gapCenterYPixels = (pipeGapY * -1 + 1) / 2 * screenHeight; // Convert relative Y to canvas Y
+    // Top pipe
+    final double topPipeBottom = gapCenterYPixels - gapHeightPixels / 2;
+    canvas.drawRect(Rect.fromLTWH(0, 0, pipeWidth, topPipeBottom), paint);
+    canvas.drawRect(Rect.fromLTWH(0, 0, pipeWidth, topPipeBottom), strokePaint);
+    // Top pipe cap
+    canvas.drawRect(Rect.fromLTWH(-5, topPipeBottom - 20, pipeWidth + 10, 20), paint); // Cap wider than pipe
+    canvas.drawRect(Rect.fromLTWH(-5, topPipeBottom - 20, pipeWidth + 10, 20), strokePaint);
+    // Bottom pipe
+    final double bottomPipeTop = gapCenterYPixels + gapHeightPixels / 2;
+    canvas.drawRect(Rect.fromLTWH(0, bottomPipeTop, pipeWidth, screenHeight - bottomPipeTop), paint);
+    canvas.drawRect(Rect.fromLTWH(0, bottomPipeTop, pipeWidth, screenHeight - bottomPipeTop), strokePaint);
+    // Bottom pipe cap
+    canvas.drawRect(Rect.fromLTWH(-5, bottomPipeTop, pipeWidth + 10, 20), paint); // Cap wider than pipe
+    canvas.drawRect(Rect.fromLTWH(-5, bottomPipeTop, pipeWidth + 10, 20), strokePaint);
+  }
+  @override
+  bool shouldRepaint(covariant PipePainter oldDelegate) {
+    return oldDelegate.pipeGap!= pipeGap || oldDelegate.pipeGapY!= pipeGapY;
+  }
+}
+// CustomPainter for the scrolling background
+class BackgroundPainter extends CustomPainter {
+  final double scrollOffset; // -1 to 0 for scrolling
+  BackgroundPainter({required this.scrollOffset});
+  @override
+  void paint(Canvas canvas, Size size) {
+    final double screenWidth = size.width;
+    final double screenHeight = size.height;
+    // Sky
+    canvas.drawRect(Rect.fromLTWH(0, 0, screenWidth, screenHeight * 0.7), Paint()..color = Colors.lightBlue.shade200);
+    // Ground
+    canvas.drawRect(Rect.fromLTWH(0, screenHeight * 0.7, screenWidth, screenHeight * 0.3), Paint()..color = Colors.brown.shade700);
+    // Grass texture (simple horizontal lines)
+    final grassPaint = Paint()..color = Colors.green.shade600;
+    for (int i = 0; i < 20; i++) {
+      canvas.drawRect(Rect.fromLTWH(i * 20.0 + scrollOffset * screenWidth, screenHeight * 0.7 - 5, 10, 5), grassPaint);
+      canvas.drawRect(Rect.fromLTWH(i * 20.0 + 0.5 * screenWidth + scrollOffset * screenWidth, screenHeight * 0.7 - 10, 10, 10), grassPaint);
+    }
+    // Draw another set for continuous scroll effect
+    for (int i = 0; i < 20; i++) {
+      canvas.drawRect(Rect.fromLTWH(i * 20.0 + scrollOffset * screenWidth + screenWidth, screenHeight * 0.7 - 5, 10, 5), grassPaint);
+      canvas.drawRect(Rect.fromLTWH(i * 20.0 + 0.5 * screenWidth + scrollOffset * screenWidth + screenWidth, screenHeight * 0.7 - 10, 10, 10), grassPaint);
+    }
+    // Clouds (simple ovals)
+    final cloudPaint = Paint()..color = Colors.white.withOpacity(0.8);
+    canvas.drawOval(Rect.fromLTWH(screenWidth * 0.1 + scrollOffset * screenWidth, screenHeight * 0.1, screenWidth * 0.3, screenHeight * 0.1), cloudPaint);
+    canvas.drawOval(Rect.fromLTWH(screenWidth * 0.3 + scrollOffset * screenWidth, screenHeight * 0.15, screenWidth * 0.2, screenHeight * 0.08), cloudPaint);
+    canvas.drawOval(Rect.fromLTWH(screenWidth * 0.6 + scrollOffset * screenWidth, screenHeight * 0.08, screenWidth * 0.4, screenHeight * 0.12), cloudPaint);
+    // Draw another set for continuous scroll effect
+    canvas.drawOval(Rect.fromLTWH(screenWidth * 0.1 + scrollOffset * screenWidth + screenWidth, screenHeight * 0.1, screenWidth * 0.3, screenHeight * 0.1), cloudPaint);
+    canvas.drawOval(Rect.fromLTWH(screenWidth * 0.3 + scrollOffset * screenWidth + screenWidth, screenHeight * 0.15, screenWidth * 0.2, screenHeight * 0.08), cloudPaint);
+    canvas.drawOval(Rect.fromLTWH(screenWidth * 0.6 + scrollOffset * screenWidth + screenWidth, screenHeight * 0.08, screenWidth * 0.4, screenHeight * 0.12), cloudPaint);
+  }
+  @override
+  bool shouldRepaint(covariant BackgroundPainter oldDelegate) {
+    return oldDelegate.scrollOffset!= scrollOffset;
+  }
+}
+176 lines (145 loc) · 7.8 KB
+
+
+
+5. game_logic.dart
+
+This file contains the core logic for collision detection and score tracking, separated for clarity.
+
+// game_logic.dart
+class GameLogic {
+  static final List<bool> _pipeScoredStatus = []; // Track if each pipe has been scored
+  static bool checkCollision(
+    double birdY,
+    double birdWidth,
+    double birdHeight,
+    List<List<double>> pipes,
+    double pipeWidth,
+    double pipeGap,
+  ) {
+    // Bird's bounding box (relative coordinates)
+    final double birdLeft = -birdWidth / 2;
+    final double birdRight = birdWidth / 2;
+    final double birdTop = birdY - birdHeight / 2;
+    final double birdBottom = birdY + birdHeight / 2;
+    for (int i = 0; i < pipes.length; i++) {
+      final pipe = pipes[i];
+      final pipeX = pipe[0];
+      final pipeGapY = pipe[1];
+      // Pipe's bounding box (relative coordinates)
+      final double pipeLeft = pipeX - pipeWidth / 2;
+      final double pipeRight = pipeX + pipeWidth / 2;
+      // Check for horizontal overlap
+      if (birdRight > pipeLeft && birdLeft < pipeRight) {
+        // Check for vertical overlap with top pipe
+        if (birdTop < (pipeGapY - pipeGap / 2) || // bird's top is above pipe's bottom
+            birdBottom > (pipeGapY + pipeGap / 2) // bird's bottom is below pipe's top
+        ) {
+          return true; // Collision detected
+        }
+      }
+    }
+    return false; // No collision
+  }
+  static bool hasScoredForPipe(int pipeIndex) {
+    // Ensure the list is long enough
+    while (_pipeScoredStatus.length <= pipeIndex) {
+      _pipeScoredStatus.add(false);
+    }
+    return _pipeScoredStatus[pipeIndex];
+  }
+  static void markPipeAsScored(int pipeIndex) {
+    // Ensure the list is long enough
+    while (_pipeScoredStatus.length <= pipeIndex) {
+      _pipeScoredStatus.add(false);
+    }
+    _pipeScoredStatus[pipeIndex] = true;
+  }
+  static void resetScoreStatus() {
+    _pipeScoredStatus.clear();
+  }
+}
+60 lines (53 loc) · 1.8 KB
+
+
+
+6. game_widgets.dart
+
+This file contains the Flutter widgets for displaying the bird, pipes, score, and the game state overlays (start and game over screens).
+
+// game_widgets.dart
+import 'package:flutter/material.dart';
+import 'package:flappy_bird_clone/game_assets.dart'; // Import custom painters
+// Widget for the bird
+class BirdWidget extends StatelessWidget {
+  final double birdY; // Relative Y position (-1 to 1)
+  final double birdWidth; // Relative width
+  final double birdHeight; // Relative height
+  final bool isFlapping;
+  final double birdVelocity;
+  const BirdWidget({
+    super.key,
+    required this.birdY,
+    required this.birdWidth,
+    required this.birdHeight,
+    required this.isFlapping,
+    required this.birdVelocity,
+  });
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      alignment: Alignment(0, birdY),
+      duration: const Duration(milliseconds: 0), // No animation for position changes
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width * birdWidth,
+        height: MediaQuery.of(context).size.height * birdHeight,
+        child: CustomPaint(
+          painter: BirdPainter(
+            flapOffset: isFlapping? 0.0 : -0.05, // A slight visual dip when not flapping
+            birdVelocity: birdVelocity,
+          ),
+        ),
+      ),
+    );
+  }
+}
+// Widget for a single pipe
+class PipeWidget extends StatelessWidget {
+  final double pipeX; // Relative X position (-1 to 1)
+  final double pipeY; // Relative Y position of the gap center (-1 to 1)
+  final double pipeWidth; // Relative width of the pipe
+  final double pipeGap; // Relative size of the gap
+  const PipeWidget({
+    super.key,
+    required this.pipeX,
+    required this.pipeY,
+    required this.pipeWidth,
+    required this.pipeGap,
+  });
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment(pipeX, 0),
+      child: CustomPaint(
+        size: Size(
+          MediaQuery.of(context).size.width * pipeWidth,
+          MediaQuery.of(context).size.height,
+        ),
+        painter: PipePainter(
+          pipeGap: pipeGap,
+          pipeGapY: pipeY,
+        ),
+      ),
+    );
+  }
+}
+// Widget for displaying the score
+class ScoreDisplay extends StatelessWidget {
+  final int score;
+  const ScoreDisplay({super.key, required this.score});
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      '$score',
+      style: const TextStyle(
+        fontSize: 60,
+        fontWeight: FontWeight.bold,
+        color: Colors.white,
+        shadows: [
+          Shadow(
+            blurRadius: 4.0,
+            color: Colors.black,
+            offset: Offset(2.0, 2.0),
+          ),
+        ],
+      ),
+    );
+  }
+}
+// Widget for the game start overlay
+class GameStartOverlay extends StatelessWidget {
+  final VoidCallback onStartGame;
+  const GameStartOverlay({super.key, required this.onStartGame});
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: const Alignment(0, -0.3),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Text(
+            'FLAPPY BIRD',
+            style: TextStyle(
+              fontSize: 48,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              shadows: [
+                Shadow(
+                  blurRadius: 4.0,
+                  color: Colors.black,
+                  offset: Offset(3.0, 3.0),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 50),
+          GestureDetector(
+            onTap: onStartGame,
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.green.shade700,
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(color: Colors.white, width: 3),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black54,
+                    blurRadius: 5,
+                    offset: Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: const Text(
+                'TAP TO PLAY',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.5,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+// Widget for the game over overlay
+class GameOverOverlay extends StatelessWidget {
+  final int score;
+  final VoidCallback onRestartGame;
+  const GameOverOverlay({
+    super.key,
+    required this.score,
+    required this.onRestartGame,
+  });
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: const Alignment(0, -0.3),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Text(
+            'GAME OVER',
+            style: TextStyle(
+              fontSize: 48,
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
+              shadows: [
+                Shadow(
+                  blurRadius: 4.0,
+                  color: Colors.black,
+                  offset: Offset(3.0, 3.0),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            'Score: $score',
+            style: const TextStyle(
+              fontSize: 36,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              shadows: [
+                Shadow(
+                  blurRadius: 4.0,
+                  color: Colors.black,
+                  offset: Offset(2.0, 2.0),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 50),
+          GestureDetector(
+            onTap: onRestartGame,
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.blue.shade700,
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(color: Colors.white, width: 3),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black54,
+                    blurRadius: 5,
+                    offset: Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: const Text(
+                'RESTART',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.5,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+243 lines (228 loc) · 6.5 KB
+
+
+
+How to use this code:
+Create a New Flutter Project:
+    flutter create flappy_bird_clone
+    cd flappy_bird_clone
+2 lines (2 loc) · 61 B
+
+Create Directories:
+Create a lib folder if it doesn't exist (it should by default).
+Inside lib, create three new Dart files: game_screen.dart, game_assets.dart, game_logic.dart, and game_widgets.dart.
+Create an assets/audios folder at the root of your project (next to lib and pubspec.yaml).
+Copy-Paste Code:
+Replace the contents of pubspec.yaml with the provided pubspec.yaml.
+Replace the contents of lib/main.dart with the provided main.dart.
+Paste the content of game_screen.dart into lib/game_screen.dart.
+Paste the content of game_assets.dart into lib/game_assets.dart.
+Paste the content of game_logic.dart into lib/game_logic.dart.
+Paste the content of game_widgets.dart into lib/game_widgets.dart.
+Add Sound Files:
+You'll need three simple sound files (e.g., .mp3 or .wav) for "flap", "score", and "hit".
+Save them as flap.mp3, score.mp3, and hit.mp3 inside the assets/audios folder you created. You can find simple free sound effects online or create them. If you can't, the game will run fine without them, but you'll get console warnings about missing assets.
+Get Dependencies:
+    flutter pub get
+1 lines (1 loc) · 19 B
+
+Run the App:
+    flutter run
+1 lines (1 loc) · 15 B
+
+You should now have a working Flappy Bird clone! You can tap anywhere on the screen to make the bird flap and start the game.
+
+Let me know if you want to tweak any of the physics, visuals, or add more features!

@@ -40,7 +40,7 @@
         "deepseek": [],
         "gemini": [],
         "llama": [
-            "The Llama provided guidance that the developer needs to create a new Flutter project, but did not provide the commands. It also provided guidance on replacing the content of the two key files, 'main.dart' and 'pubspec.yaml'."
+            "Llama provided guidance that the developer needs to create a new Flutter project, but did not provide the commands. It also provided guidance on replacing the content of the two key files, 'main.dart' and 'pubspec.yaml'."
         ]
     }
 }
