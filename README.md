@@ -2,8 +2,7 @@
 
 Describes an experiment where various LLMs are compared to assess their ability to generate functional apps
 
-View live page at:
-- [index.html](https://nearchos.github.io/llm-comparison/)
+A live page is automatically generated with [build.dart](scripts/build.dart), and is available at:
 - [data.html](https://nearchos.github.io/llm-comparison/data.html)
 
 Build Flutter projects using:
