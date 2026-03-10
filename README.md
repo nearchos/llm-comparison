@@ -8,4 +8,5 @@ View live page at:
 
 Build Flutter projects using:
 
-- `flutter build web --base-href /path/to/target/folder`
+- `flutter build web --base-href /live/<llm>/<prompt-llm>/`
+- for example: `flutter build web --base-href /live/chatgpt/chatgpt/`
