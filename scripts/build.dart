@@ -131,7 +131,7 @@ Future<void> main() async {
     template = template.replaceAll("%rows%", rows.join("\n\n"));
 
     // write 'data.html'
-    await File("../data.html").writeAsString(template);
+    await File("../docs/data.html").writeAsString(template);
     print('Builder finished.');
 }
 
