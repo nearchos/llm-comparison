@@ -5,13 +5,18 @@
             "After creating the project manually, and copying the files, the project launches as a Web app.",
             "The resulting project is not functional: the player loses as soon as the game starts, with no opportunity for reacting."
         ],
-        "claude": [],
+        "claude": [
+        ],
         "deepseek": [],
         "gemini": [],
         "llama": []
     },
     "claude": {
-        "chatgpt": [],
+        "chatgpt": [
+            "The generated project compiles but does not run. There is no Web target.",
+            "This command fixes the issue: 'flutter create . --platforms web'",
+            "The resulting project is functional albeit quite difficult to use."
+        ],
         "claude": [],
         "deepseek": [],
         "gemini": [],
