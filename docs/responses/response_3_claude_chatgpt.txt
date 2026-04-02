@@ -1,0 +1,31 @@
+All 9 files are ready. Here's the complete picture.
+
+Project Folder Tree
+flappy_bird/
+├── pubspec.yaml
+├── README.md
+└── lib/
+    ├── main.dart
+    ├── game/
+    │   ├── game_state.dart
+    │   ├── bird.dart
+    │   ├── pipe.dart
+    │   └── game_engine.dart
+    ├── painters/
+    │   └── game_painter.dart
+    └── screens/
+        └── game_screen.dart
+
+Build & Run
+bashcd flappy_bird
+flutter pub get
+flutter run              # debug
+flutter run --release    # best performance
+
+Architecture at a Glance
+GameEngine (ChangeNotifier) is the single source of truth. It holds the Bird, the pipe list, scroll offsets, score, and GameState. Its tick() method advances physics exactly one frame — called by a Ticker in GameScreen at the display refresh rate (~60 fps).
+GameScreen is intentionally thin: it creates the Ticker, routes onTapDown → engine.tap(), and wraps CustomPaint in AnimatedBuilder. No setState is ever called.
+GamePainter does all rendering in one paint() pass: sky gradient → parallax clouds → green pipes with flared caps → scrolling striped ground → animated bird (3-frame wing, rotation, beak, eye shine) → HUD (live score, start overlay, game-over panel with score/best and restart button).
+
+Self-Verification Checklist
+Check✅Zero external packages (pubspec.yaml — Flutter SDK only)✅All imports resolve — no cross-file gaps✅No asset files declared or needed (fully programmatic graphics)✅Dart 3.0+ switch expressions used correctly throughout✅Ticker and GameEngine both disposed on widget teardown✅init() guard prevents double-initialisation on hot reload✅Bird hitbox is smaller than the visual body (forgiving collision)✅Ground layer drawn after pipes — naturally clips pipe bottoms✅High score survives in-session restarts✅Portrait lock + immersive fullscreen set in main()✅Compatible with Android, iOS, macOS, Windows, Web
