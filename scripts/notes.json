@@ -55,7 +55,9 @@
     "gemini": {
         "chatgpt": [],
         "claude": [],
-        "deepseek": [],
+        "deepseek": [
+            "Requires manual creation of a flutter project and copying the code into the main.dart file.",
+            "The resulting project is not functional: the player loses as soon as the game starts"],
         "gemini": [],
         "llama": []
     },
