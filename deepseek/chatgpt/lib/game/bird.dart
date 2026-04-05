@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:ui';
 
 class Bird {
   double x = 100;
@@ -60,4 +61,4 @@ class Bird {
   Rect getCollisionRect() {
     return Rect.fromLTWH(x - 15, y - 12, 30, 24);
   }
-}
+} 

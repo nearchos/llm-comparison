@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -341,7 +342,7 @@ class GamePainter extends CustomPainter {
     
     // Eye
     canvas.drawCircle(const Offset(8, -4), 3, birdEyePaint);
-    canvas.drawCircle(const Offset(9, -5), 1, Colors.white);
+    canvas.drawCircle(const Offset(9, -5), 1, birdPaint);
     
     // Beak
     canvas.drawRRect(

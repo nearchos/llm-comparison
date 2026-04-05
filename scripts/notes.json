@@ -23,7 +23,16 @@
         "llama": []
     },
     "deepseek": {
-        "chatgpt": [],
+        "chatgpt": [
+            "The generated project compiles but does not run. There is no Web target.",
+            "This command fixes the issue: 'flutter create . --platforms web'",
+            "The resulting project does not launch for this error: 'Error: unable to locate asset entry in pubspec.yaml: assets/fonts/PixelFont.ttf.'",
+            "Removing the font declaration from pubspec.yaml allows the project build to move forward.",
+            "The resulting project still fails to run as dependencies are missing from some files (dart:ui).",
+            "Adding the dependency 'dart:ui' to the affected files fixes this issue.",
+            "The resulting project is still not running as a 'Color' object is used in.an instance where a 'Paint' is expected.",
+            "Replacing the 'Color' with a 'Paint' object fixes this issue."
+        ],
         "claude": [],
         "deepseek": [
             "DeepSeek does not guide you to create a project, but simply a main.dart containing the game code.",

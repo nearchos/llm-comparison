@@ -1,11 +1,12 @@
 import 'dart:math';
+import 'dart:ui';
 
 class Pipe {
   double x;
   final double width = 60;
-  double topHeight;
-  double bottomY;
-  double bottomHeight;
+  late double topHeight;
+  late double bottomY;
+  late double bottomHeight;
   bool isPassed = false;
   
   static const double gapSize = 150;

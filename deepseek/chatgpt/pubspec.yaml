@@ -20,11 +20,5 @@ flutter:
   assets:
     - assets/audio/
 
-  fonts:
-    - family: PixelFont
-      fonts:
-        - asset: assets/fonts/PixelFont.ttf
-          weight: 400
-
 # Note: If PixelFont.ttf is not available, the app will use default font
 # To add the font, create assets/fonts/ and add a pixel-style font file
