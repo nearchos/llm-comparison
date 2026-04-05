@@ -87,7 +87,13 @@
             "Requires manual creation of a flutter project and copying the code into the main.dart file.",
             "The game is almost impossible to play."
         ],
-        "gemini": [],
+        "gemini": [
+            "Provided source code (main.dart) and no instructions.",
+            "Requires manual creation of a flutter project and copying the code into the main.dart file.",
+            "The resulting project (flutter run) fails in runtime with no easy resolution.",
+            "Running the project in release mode (flutter run --release) allows it to launch.",
+            "The resulting game is playable with trivial graphics."
+        ],
         "llama": [
             "Llama provided guidance that the developer needs to create a new Flutter project, but did not provide the commands. It also provided guidance on replacing the content of the two key files, 'main.dart' and 'pubspec.yaml'."
         ]
