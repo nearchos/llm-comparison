@@ -21,7 +21,10 @@
             "This command fixes the issue: 'flutter create . --platforms web'",
             "The resulting project is functional albeit quite difficult to use."
         ],
-        "claude": [],
+        "claude": [
+            "The generated code uses a type Ticker which is not defined (Type 'Ticker' not found)",
+            "The resulting project is not functional: the gameplay is rather difficult for a beginner."
+        ],
         "deepseek": [],
         "gemini": [],
         "llama": []
