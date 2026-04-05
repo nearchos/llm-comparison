@@ -1,0 +1,30 @@
+name: flappy_bird_clone
+description: A Flappy Bird clone built with Flutter
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  audioplayers: ^5.2.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  
+  assets:
+    - assets/audio/
+
+  fonts:
+    - family: PixelFont
+      fonts:
+        - asset: assets/fonts/PixelFont.ttf
+          weight: 400
+
+# Note: If PixelFont.ttf is not available, the app will use default font
+# To add the font, create assets/fonts/ and add a pixel-style font file
