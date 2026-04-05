@@ -1,0 +1,322 @@
+import 'dart:async';
+import 'dart:math';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  runApp(const FlappyBirdApp());
+}
+
+class FlappyBirdApp extends StatelessWidget {
+  const FlappyBirdApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const GameScreen(),
+    );
+  }
+}
+
+class GameScreen extends StatefulWidget {
+  const GameScreen({super.key});
+
+  @override
+  State<GameScreen> createState() => _GameScreenState();
+}
+
+class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
+  // Game State Variables
+  static double birdY = 0;
+  double time = 0;
+  double height = 0;
+  double initialPos = birdY;
+  bool gameHasStarted = false;
+  int score = 0;
+  int highscore = 0;
+
+  // Pipe variables
+  static double pipeXone = 1;
+  double pipeXtwo = 1 + 1.5; // Distance between pipes
+  static double pipeWidth = 0.25; // Relative to screen width
+  
+  // Random pipe heights
+  Random random = Random();
+  late double pipeHone;
+  late double pipeHtwo;
+
+  @override
+  void initState() {
+    super.initState();
+    _resetPipes();
+  }
+
+  void _resetPipes() {
+    pipeHone = random.nextDouble() * 0.4 + 0.1; // Random height between 0.1 and 0.5
+    pipeHtwo = random.nextDouble() * 0.4 + 0.1;
+  }
+
+  void jump() {
+    setState(() {
+      time = 0;
+      initialPos = birdY;
+    });
+  }
+
+  void startGame() {
+    gameHasStarted = true;
+    Timer.periodic(const Duration(milliseconds: 30), (timer) {
+      // Physical Equation: distance = ut + 0.5 * g * t^2
+      // We use a simplified version for Flutter coordinates
+      time += 0.05;
+      height = -4.9 * time * time + 2.8 * time;
+      
+      setState(() {
+        birdY = initialPos - height;
+        
+        // Move pipes left
+        pipeXone -= 0.02;
+        pipeXtwo -= 0.02;
+      });
+
+      // Reset pipe if it goes off screen
+      if (pipeXone < -1.1) {
+        pipeXone += 3;
+        pipeHone = random.nextDouble() * 0.4 + 0.1;
+        score++;
+      }
+      if (pipeXtwo < -1.1) {
+        pipeXtwo += 3;
+        pipeHtwo = random.nextDouble() * 0.4 + 0.1;
+        score++;
+      }
+
+      // Check for collisions
+      if (checkCollision()) {
+        timer.cancel();
+        _showGameOver();
+      }
+    });
+  }
+
+  bool checkCollision() {
+    // Ceiling or Floor collision
+    if (birdY < -1.1 || birdY > 1.1) return true;
+
+    // Pipe collision detection
+    // X-coordinates: Bird is roughly at 0. Pipe is at pipeX.
+    // Width of bird is approx 0.1 units
+    if (pipeXone < 0.1 && pipeXone > -0.1) {
+      if (birdY < -1 + pipeHone || birdY > -1 + pipeHone + 0.4 == false) {
+         // Check if bird is NOT in the gap
+         if (birdY < (-1 + pipeHone * 2) || birdY > (-1 + pipeHone * 2 + 0.4)) return true;
+      }
+    }
+    
+    // Simplified collision logic for specific pipe gaps
+    bool hitPipe1 = (pipeXone > -0.2 && pipeXone < 0.2) && 
+                    (birdY < -1 + (pipeHone * 2) || birdY > -1 + (pipeHone * 2) + 0.4);
+    bool hitPipe2 = (pipeXtwo > -0.2 && pipeXtwo < 0.2) && 
+                    (birdY < -1 + (pipeHtwo * 2) || birdY > -1 + (pipeHtwo * 2) + 0.4);
+
+    return hitPipe1 || hitPipe2;
+  }
+
+  void _showGameOver() {
+    if (score > highscore) highscore = score;
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.brown,
+        title: const Text("G A M E  O V E R", style: TextStyle(color: Colors.white)),
+        content: Text("Score: $score", style: const TextStyle(color: Colors.white)),
+        actions: [
+          TextButton(
+            onPressed: () {
+              resetGame();
+              Navigator.pop(context);
+            },
+            child: const Text("PLAY AGAIN", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+          )
+        ],
+      ),
+    );
+  }
+
+  void resetGame() {
+    setState(() {
+      birdY = 0;
+      gameHasStarted = false;
+      time = 0;
+      initialPos = birdY;
+      score = 0;
+      pipeXone = 1;
+      pipeXtwo = 1 + 1.5;
+      _resetPipes();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: gameHasStarted ? jump : startGame,
+      child: Scaffold(
+        body: Column(
+          children: [
+            Expanded(
+              flex: 3,
+              child: Container(
+                color: Colors.lightBlue,
+                child: Stack(
+                  children: [
+                    // Moving Pipes
+                    PipeWidget(pipeX: pipeXone, pipeHeight: pipeHone),
+                    PipeWidget(pipeX: pipeXtwo, pipeHeight: pipeHtwo),
+                    
+                    // The Bird
+                    Container(
+                      alignment: Alignment(0, birdY),
+                      child: const Bird(),
+                    ),
+                    
+                    // Tap to Play Text
+                    Container(
+                      alignment: const Alignment(0, -0.3),
+                      child: gameHasStarted 
+                        ? const Text("") 
+                        : const Text("T A P  T O  P L A Y", style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold)),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            // Ground
+            Container(height: 15, color: Colors.green),
+            Expanded(
+              child: Container(
+                color: Colors.brown,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text("SCORE", style: TextStyle(color: Colors.white, fontSize: 20)),
+                        const SizedBox(height: 20),
+                        Text("$score", style: const TextStyle(color: Colors.white, fontSize: 35)),
+                      ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text("BEST", style: TextStyle(color: Colors.white, fontSize: 20)),
+                        const SizedBox(height: 20),
+                        Text("$highscore", style: const TextStyle(color: Colors.white, fontSize: 35)),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// A procedurally drawn Bird using CustomPainter
+class Bird extends StatelessWidget {
+  const Bird({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 60,
+      width: 60,
+      child: CustomPaint(
+        painter: BirdPainter(),
+      ),
+    );
+  }
+}
+
+class BirdPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final bodyPaint = Paint()..color = Colors.yellow;
+    final eyePaint = Paint()..color = Colors.white;
+    final pupilPaint = Paint()..color = Colors.black;
+    final wingPaint = Paint()..color = Colors.white.withOpacity(0.8);
+    final beakPaint = Paint()..color = Colors.orange;
+
+    // Body
+    canvas.drawCircle(Offset(size.width / 2, size.height / 2), 20, bodyPaint);
+    
+    // Eye
+    canvas.drawCircle(Offset(size.width / 2 + 10, size.height / 2 - 5), 6, eyePaint);
+    canvas.drawCircle(Offset(size.width / 2 + 12, size.height / 2 - 5), 3, pupilPaint);
+    
+    // Wing
+    canvas.drawOval(Rect.fromLTWH(size.width / 2 - 15, size.height / 2, 15, 10), wingPaint);
+    
+    // Beak
+    canvas.drawPath(Path()
+      ..moveTo(size.width / 2 + 18, size.height / 2)
+      ..lineTo(size.width / 2 + 30, size.height / 2 + 5)
+      ..lineTo(size.width / 2 + 18, size.height / 2 + 10)
+      ..close(), beakPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+/// A widget representing the top and bottom pipes
+class PipeWidget extends StatelessWidget {
+  final double pipeX;
+  final double pipeHeight; // 0.1 to 0.5
+
+  const PipeWidget({super.key, required this.pipeX, required this.pipeHeight});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        // Top Pipe
+        AnimatedContainer(
+          alignment: Alignment(pipeX, -1.1),
+          duration: const Duration(milliseconds: 0),
+          child: Container(
+            width: 80,
+            height: MediaQuery.of(context).size.height * pipeHeight,
+            decoration: BoxDecoration(
+              color: Colors.green,
+              border: Border.all(width: 5, color: const Color(0xFF2E7D32)),
+              borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+            ),
+          ),
+        ),
+        // Bottom Pipe
+        AnimatedContainer(
+          alignment: Alignment(pipeX, 1.1),
+          duration: const Duration(milliseconds: 0),
+          child: Container(
+            width: 80,
+            // The 0.4 here represents the "gap" the bird flies through
+            height: MediaQuery.of(context).size.height * (0.6 - pipeHeight),
+            decoration: BoxDecoration(
+              color: Colors.green,
+              border: Border.all(width: 5, color: const Color(0xFF2E7D32)),
+              borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
