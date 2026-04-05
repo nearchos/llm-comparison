@@ -1,0 +1,459 @@
+import 'dart:math';
+import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+
+void main() {
+  runApp(const FlappyBirdApp());
+}
+
+class FlappyBirdApp extends StatelessWidget {
+  const FlappyBirdApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Flappy Bird',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const FlappyBirdGame(),
+    );
+  }
+}
+
+class FlappyBirdGame extends StatefulWidget {
+  const FlappyBirdGame({Key? key}) : super(key: key);
+
+  @override
+  State<FlappyBirdGame> createState() => _FlappyBirdGameState();
+}
+
+class _FlappyBirdGameState extends State<FlappyBirdGame> with SingleTickerProviderStateMixin {
+  late Ticker _ticker;
+  Duration _lastTime = Duration.zero;
+
+  // --- Game Tuning Constants ---
+  final double gravity = 1500;
+  final double jumpVelocity = -450;
+  final double pipeSpeed = 220;
+  final double pipeWidth = 70;
+  final double pipeGap = 180;
+  final double groundHeight = 120;
+  final double birdRadius = 18;
+  final double birdX = 100; // Fixed horizontal position of the bird
+
+  // --- Game State Variables ---
+  double screenWidth = 0;
+  double screenHeight = 0;
+  double birdY = 0;
+  double birdVelocity = 0;
+  List<Pipe> pipes = [];
+  int score = 0;
+  bool isPlaying = false;
+  bool isGameOver = false;
+  final Random _random = Random();
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize the game loop ticker
+    _ticker = createTicker(_update);
+    _ticker.start();
+  }
+
+  @override
+  void dispose() {
+    _ticker.dispose();
+    super.dispose();
+  }
+
+  // --- Game Loop Update ---
+  void _update(Duration elapsed) {
+    if (_lastTime == Duration.zero) {
+      _lastTime = elapsed;
+      return;
+    }
+
+    // Calculate delta time in seconds
+    double dt = (elapsed - _lastTime).inMicroseconds / 1000000.0;
+    _lastTime = elapsed;
+
+    if (!isPlaying) return;
+
+    setState(() {
+      // 1. Apply Physics
+      birdVelocity += gravity * dt;
+      birdY += birdVelocity * dt;
+
+      // 2. Move Pipes
+      for (var pipe in pipes) {
+        pipe.x -= pipeSpeed * dt;
+      }
+
+      // 3. Remove off-screen pipes
+      if (pipes.isNotEmpty && pipes.first.x < -pipeWidth) {
+        pipes.removeAt(0);
+      }
+
+      // 4. Spawn new pipes
+      if (pipes.isEmpty || pipes.last.x < screenWidth - 250) {
+        _spawnPipe();
+      }
+
+      // 5. Check Score
+      for (var pipe in pipes) {
+        if (!pipe.passed && birdX > pipe.x + pipeWidth) {
+          score++;
+          pipe.passed = true;
+        }
+      }
+
+      // 6. Check Collisions
+      _checkCollisions();
+    });
+  }
+
+  void _spawnPipe() {
+    double minGapTop = 50;
+    double maxGapTop = screenHeight - groundHeight - pipeGap - 50;
+    
+    // Ensure we have valid boundaries before spawning
+    if (maxGapTop < minGapTop) {
+      maxGapTop = minGapTop + 10; 
+    }
+
+    double gapTop = minGapTop + _random.nextDouble() * (maxGapTop - minGapTop);
+    
+    pipes.add(Pipe(
+      x: screenWidth,
+      gapTop: gapTop,
+    ));
+  }
+
+  void _checkCollisions() {
+    // Ground and Ceiling collision
+    if (birdY + birdRadius >= screenHeight - groundHeight || birdY - birdRadius <= 0) {
+      _gameOver();
+      return;
+    }
+
+    // Pipe collision (Using a slightly smaller hitbox for a fairer feel)
+    Rect birdHitbox = Rect.fromCircle(
+      center: Offset(birdX, birdY),
+      radius: birdRadius * 0.8,
+    );
+
+    for (var pipe in pipes) {
+      // Top Pipe Rect
+      Rect topPipe = Rect.fromLTRB(pipe.x, 0, pipe.x + pipeWidth, pipe.gapTop);
+      // Bottom Pipe Rect
+      Rect bottomPipe = Rect.fromLTRB(
+          pipe.x, pipe.gapTop + pipeGap, pipe.x + pipeWidth, screenHeight - groundHeight);
+
+      if (birdHitbox.overlaps(topPipe) || birdHitbox.overlaps(bottomPipe)) {
+        _gameOver();
+        return;
+      }
+    }
+  }
+
+  void _gameOver() {
+    isPlaying = false;
+    isGameOver = true;
+  }
+
+  void _resetGame() {
+    setState(() {
+      birdY = (screenHeight - groundHeight) / 2;
+      birdVelocity = 0;
+      pipes.clear();
+      score = 0;
+      isGameOver = false;
+      isPlaying = true;
+      _spawnPipe(); // Spawn the first pipe immediately
+    });
+  }
+
+  void _handleTap() {
+    if (isGameOver) {
+      _resetGame();
+    } else if (!isPlaying) {
+      // First tap starts the game
+      isPlaying = true;
+      _resetGame();
+      // Apply first jump
+      birdVelocity = jumpVelocity;
+    } else {
+      // Normal flap
+      birdVelocity = jumpVelocity;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Capture screen dimensions to initialize game coordinates
+    Size size = MediaQuery.of(context).size;
+    if (screenWidth == 0 || screenHeight == 0) {
+      screenWidth = size.width;
+      screenHeight = size.height;
+      birdY = (screenHeight - groundHeight) / 2; // Start in middle
+    }
+
+    return Scaffold(
+      body: GestureDetector(
+        onTapDown: (_) => _handleTap(),
+        behavior: HitTestBehavior.opaque,
+        child: Stack(
+          children: [
+            // The main game rendering layer
+            CustomPaint(
+              size: Size.infinite,
+              painter: GamePainter(
+                birdY: birdY,
+                birdX: birdX,
+                birdRadius: birdRadius,
+                birdVelocity: birdVelocity,
+                pipes: pipes,
+                pipeWidth: pipeWidth,
+                pipeGap: pipeGap,
+                groundHeight: groundHeight,
+              ),
+            ),
+
+            // Score Display
+            if (!isGameOver)
+              Positioned(
+                top: 80,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: Text(
+                    score.toString(),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 60,
+                      fontWeight: FontWeight.bold,
+                      shadows: [
+                        Shadow(color: Colors.black, offset: Offset(2, 2), blurRadius: 4),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+
+            // Start Screen Overlay
+            if (!isPlaying && !isGameOver)
+              Container(
+                alignment: Alignment.center,
+                color: Colors.black26,
+                child: const Text(
+                  'TAP TO START',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    shadows: [
+                      Shadow(color: Colors.black, offset: Offset(2, 2), blurRadius: 4),
+                    ],
+                  ),
+                ),
+              ),
+
+            // Game Over Overlay
+            if (isGameOver)
+              Container(
+                color: Colors.black54,
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'GAME OVER',
+                        style: TextStyle(
+                          color: Colors.orangeAccent,
+                          fontSize: 48,
+                          fontWeight: FontWeight.bold,
+                          shadows: [
+                            Shadow(color: Colors.black, offset: Offset(2, 2), blurRadius: 4),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Text(
+                        'SCORE: $score',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 36,
+                          fontWeight: FontWeight.bold,
+                          shadows: [
+                            Shadow(color: Colors.black, offset: Offset(2, 2), blurRadius: 4),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 40),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: const [
+                            BoxShadow(color: Colors.black45, offset: Offset(0, 4), blurRadius: 4)
+                          ],
+                        ),
+                        child: const Text(
+                          'TAP TO RESTART',
+                          style: TextStyle(
+                            color: Colors.black87,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// --- Data Model for Pipes ---
+class Pipe {
+  double x;
+  final double gapTop;
+  bool passed;
+
+  Pipe({
+    required this.x,
+    required this.gapTop,
+    this.passed = false,
+  });
+}
+
+// --- Visual Rendering ---
+class GamePainter extends CustomPainter {
+  final double birdY;
+  final double birdX;
+  final double birdRadius;
+  final double birdVelocity;
+  final List<Pipe> pipes;
+  final double pipeWidth;
+  final double pipeGap;
+  final double groundHeight;
+
+  GamePainter({
+    required this.birdY,
+    required this.birdX,
+    required this.birdRadius,
+    required this.birdVelocity,
+    required this.pipes,
+    required this.pipeWidth,
+    required this.pipeGap,
+    required this.groundHeight,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // 1. Draw Sky (Background)
+    Paint skyPaint = Paint()..color = const Color(0xFF70C5CE);
+    canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), skyPaint);
+
+    // 2. Draw Pipes
+    Paint pipePaint = Paint()..color = const Color(0xFF74BF2E);
+    Paint pipeBorderPaint = Paint()
+      ..color = const Color(0xFF538D22)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3;
+
+    for (var pipe in pipes) {
+      // Top pipe
+      Rect topRect = Rect.fromLTRB(pipe.x, 0, pipe.x + pipeWidth, pipe.gapTop);
+      Rect topLip = Rect.fromLTRB(pipe.x - 4, pipe.gapTop - 30, pipe.x + pipeWidth + 4, pipe.gapTop);
+      
+      canvas.drawRect(topRect, pipePaint);
+      canvas.drawRect(topRect, pipeBorderPaint);
+      canvas.drawRect(topLip, pipePaint);
+      canvas.drawRect(topLip, pipeBorderPaint);
+
+      // Bottom pipe
+      double bottomPipeY = pipe.gapTop + pipeGap;
+      Rect bottomRect = Rect.fromLTRB(
+          pipe.x, bottomPipeY, pipe.x + pipeWidth, size.height - groundHeight);
+      Rect bottomLip = Rect.fromLTRB(
+          pipe.x - 4, bottomPipeY, pipe.x + pipeWidth + 4, bottomPipeY + 30);
+          
+      canvas.drawRect(bottomRect, pipePaint);
+      canvas.drawRect(bottomRect, pipeBorderPaint);
+      canvas.drawRect(bottomLip, pipePaint);
+      canvas.drawRect(bottomLip, pipeBorderPaint);
+    }
+
+    // 3. Draw Ground
+    Paint groundTopPaint = Paint()..color = const Color(0xFF73BF2E);
+    Paint groundBottomPaint = Paint()..color = const Color(0xFFDED895);
+    
+    double groundY = size.height - groundHeight;
+    canvas.drawRect(
+        Rect.fromLTRB(0, groundY, size.width, groundY + 15), groundTopPaint);
+    canvas.drawRect(
+        Rect.fromLTRB(0, groundY + 15, size.width, size.height), groundBottomPaint);
+
+    // 4. Draw Bird
+    canvas.save();
+    // Move canvas origin to bird center for rotation
+    canvas.translate(birdX, birdY);
+    
+    // Calculate rotation based on velocity (clamp between facing up and diving)
+    double rotation = atan(birdVelocity / 400);
+    rotation = rotation.clamp(-pi / 6, pi / 3);
+    canvas.rotate(rotation);
+
+    // Bird Body
+    Paint birdPaint = Paint()..color = const Color(0xFFF6D738);
+    Paint birdBorder = Paint()
+      ..color = Colors.black87
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2;
+    
+    canvas.drawCircle(Offset.zero, birdRadius, birdPaint);
+    canvas.drawCircle(Offset.zero, birdRadius, birdBorder);
+
+    // Bird Eye
+    Paint eyeWhite = Paint()..color = Colors.white;
+    Paint eyePupil = Paint()..color = Colors.black;
+    canvas.drawCircle(Offset(birdRadius * 0.4, -birdRadius * 0.3), birdRadius * 0.4, eyeWhite);
+    canvas.drawCircle(Offset(birdRadius * 0.5, -birdRadius * 0.3), birdRadius * 0.15, eyePupil);
+    canvas.drawCircle(Offset(birdRadius * 0.4, -birdRadius * 0.3), birdRadius * 0.4, birdBorder);
+
+    // Bird Beak
+    Paint beakPaint = Paint()..color = const Color(0xFFF26829);
+    Path beakPath = Path()
+      ..moveTo(birdRadius * 0.6, 0)
+      ..lineTo(birdRadius * 1.3, birdRadius * 0.2)
+      ..lineTo(birdRadius * 0.5, birdRadius * 0.5)
+      ..close();
+    canvas.drawPath(beakPath, beakPaint);
+    canvas.drawPath(beakPath, birdBorder);
+
+    // Bird Wing
+    Paint wingPaint = Paint()..color = Colors.white;
+    Path wingPath = Path()
+      ..moveTo(-birdRadius * 0.6, 0)
+      ..quadraticBezierTo(-birdRadius * 0.8, birdRadius * 0.4, -birdRadius * 0.2, birdRadius * 0.4)
+      ..quadraticBezierTo(-birdRadius * 0.1, birdRadius * 0.1, -birdRadius * 0.6, 0);
+    canvas.drawPath(wingPath, wingPaint);
+    canvas.drawPath(wingPath, birdBorder);
+
+    canvas.restore();
+  }
+
+  @override
+  bool shouldRepaint(covariant GamePainter oldDelegate) {
+    // Redraw every frame since the game is animating
+    return true;
+  }
+}
