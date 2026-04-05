@@ -49,7 +49,9 @@
         "llama": []
     },
     "llama": {
-        "chatgpt": [],
+        "chatgpt": [
+            "Llama provided source code and instructions to create a Flutter project. The resulting project fails in runtime though with no easy resolution."
+        ],
         "claude": [],
         "deepseek": [],
         "gemini": [],
