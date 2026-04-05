@@ -1,37 +1,39 @@
-Okay, this sounds like a super fun challenge! Here's a prompt designed to get an LLM to generate a complete Flappy Bird clone in Flutter, hitting all your points:
+Generate a complete, production-ready Flutter project for a Flappy Bird clone. The project should compile, build, and run with minimal to zero manual changes.
 
-***
+**Key Requirements:**
 
-"Please generate the complete source code for a Flappy Bird clone developed in Flutter.
+1.  **Completeness & Buildability:**
+    *   Provide the entire Flutter project structure, including `pubspec.yaml`, `main.dart`, and any necessary subdirectories for widgets, game logic, assets, etc.
+    *   Ensure all dependencies are correctly listed and versioned in `pubspec.yaml`.
+    *   The code must be syntactically correct and follow standard Flutter best practices.
 
-**Core Requirements (Non-negotiable):**
+2.  **Minimal External Libraries:**
+    *   Prioritize native Flutter widgets and core Dart functionalities.
+    *   Avoid external packages unless absolutely necessary for core game mechanics (e.g., specific physics engines if a native approach isn't feasible, but aim to avoid even these).
+    *   The goal is to demonstrate a robust game built primarily with Flutter's built-in capabilities.
 
-1.  **Completeness and Buildability:** The generated code must be a fully functional Flutter project that compiles, builds, and runs with minimal (ideally zero) manual intervention. Provide all necessary files, including `pubspec.yaml`, `main.dart`, and any other required Dart files.
-2.  **Native Flutter Focus:** Prioritize using native Flutter widgets and drawing capabilities. Minimize external libraries to only those absolutely essential for basic game functionality if native alternatives are not feasible.
-3.  **Authentic Gameplay:** Replicate the core Flappy Bird gameplay mechanics:
-    *   **Bird Physics:** Gravity, upward flap on tap, continuous forward movement.
-    *   **Pipes:** Vertically moving, randomly spaced pairs of pipes that generate from the right and move left.
-    *   **Collision Detection:** Accurate collision detection between the bird and pipes, or the bird and the ground/ceiling.
-    *   **Scoring:** Increment score when the bird successfully passes through a pipe gap.
-    *   **Game States:** Implement start screen, playing state, game over screen with score display, and restart functionality.
+3.  **Gameplay Resemblance:**
+    *   **Bird:** A bird character that flaps upwards when tapped, then falls due to gravity.
+    *   **Pipes:** Vertically scrolling pipes with a gap in the middle. The gap height and pipe spacing should vary slightly.
+    *   **Collision Detection:** Implement collision detection between the bird and pipes, as well as the bird and the ground/ceiling.
+    *   **Scoring:** A score should increment each time the bird successfully passes a pair of pipes.
+    *   **Game States:**
+        *   **Start Screen:** Display a "Tap to Start" or similar message.
+        *   **Playing:** Active gameplay with bird movement, pipes, and scoring.
+        *   **Game Over:** Display the final score and a "Play Again" option.
 
-**Visual & Audio (Highly Desired):**
+4.  **Graphics:**
+    *   **Prioritize Code-Based Graphics:** Wherever possible, use Flutter's `CustomPaint` or built-in widgets to draw the bird, pipes, background elements (like clouds, ground), and score. Describe how these elements are drawn using code.
+    *   **Image Assets (if necessary):** If code-based graphics are genuinely impractical for certain elements (e.g., a specific bird sprite), provide the base64 encoded strings for these images directly within the response, or clearly state the image filenames and formats that would be needed, and provide clear instructions on where to place them. Assume a simple, pixel-art style for any necessary images, similar to the original game.
+    *   **Background:** Implement a simple, continuously scrolling background (e.g., blue sky with clouds, or a simple ground layer).
 
-1.  **Original Game Graphics:**
-    *   **If possible, define graphics in code (e.g., CustomPainter for bird, pipes).** This is the preferred approach.
-    *   **If images are used, provide all necessary image assets (e.g., bird sprite, pipe segments, background) either as base64 encoded strings within the code, or describe them in such detail that they can be easily created or sourced.** Clearly specify where these assets should be placed within the Flutter project structure.
-    *   The bird should have a flapping animation.
-    *   The background should scroll continuously.
-2.  **Sound Effects (Optional but highly desired):**
-    *   Include sound effects for flapping, passing a pipe, and collision. If included, use minimal external libraries and ensure they are properly integrated.
+5.  **Sound (Nice-to-have):**
+    *   If possible without adding complex external dependencies, include basic sound effects for:
+        *   Flap (bird jump)
+        *   Score (passing a pipe)
+        *   Game Over (collision)
+    *   If sounds are included, specify how to integrate them and any necessary asset paths. If external libraries are needed for sound, explicitly mention this and try to use the most lightweight option.
 
-**Constraints & Guidelines:**
+**Output Format:**
 
-*   Use modern Flutter syntax and best practices.
-*   Clearly structure the project into logical files (e.g., `main.dart`, `game_widgets.dart`, `game_logic.dart`).
-*   Add comments to explain complex logic or custom drawing.
-*   Assume a standard portrait mode screen orientation.
-*   The game loop should be handled efficiently, likely using `TickerProviderStateMixin` for animations.
-*   No advanced state management solutions are required (e.g., Riverpod, BLoC), simple `setState` is sufficient."
-
-***
+Provide the full Dart code for `main.dart` and any other essential `.dart` files, clearly indicating file paths (e.g., `lib/widgets/bird.dart`). Include the `pubspec.yaml` content. Add brief comments to explain key game logic sections.
