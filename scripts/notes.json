@@ -68,7 +68,9 @@
         ],
         "llama": [
             "The code does not compile because of a type mismatch (The argument type 'int' can't be assigned to the parameter type 'double).",
-            ""
+            "Fixing the cosde with a cast enables the app to launch.",
+            "The resulting app is functional but difficult for beginners to play.",
+            "The graphics are better than trivial but the background clouds creating the parallax effect move in the wrong direction (left to right instead of right to left)."
         ]
     },
     "gemini": {

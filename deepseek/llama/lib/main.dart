@@ -475,7 +475,7 @@ class GamePainter extends CustomPainter {
       final cloudX = (i * 200 + gameEngine.backgroundOffset) % (size.width + 200) - 100;
       final cloudY = 50 + (i * 80) % 150;
       
-      canvas.drawCircle(Offset(cloudX, cloudY), 30, cloudPaint);
+      canvas.drawCircle(Offset(cloudX, cloudY as double), 30, cloudPaint);
       canvas.drawCircle(Offset(cloudX + 30, cloudY - 15), 35, cloudPaint);
       canvas.drawCircle(Offset(cloudX - 20, cloudY - 10), 25, cloudPaint);
       canvas.drawCircle(Offset(cloudX + 10, cloudY + 10), 28, cloudPaint);
