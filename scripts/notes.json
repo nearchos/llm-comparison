@@ -18,9 +18,12 @@
             "The resulting project (flutter run) fails in runtime with no easy resolution.",
             "Running the project in release mode (flutter run --release) allows it to launch.",
             "The game is mostly playable with trivial graphics."
-
         ],
-        "llama": []
+        "llama": [
+            "Provided source code (pubspec.yaml and main.dart) and no instructions.",
+            "Requires manual creation of a flutter project and copying the code into the pubspec.yaml and main.dart files.",
+            "The resulting project is not functional: the player loses as soon as the game starts"
+        ]
     },
     "claude": {
         "chatgpt": [

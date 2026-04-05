@@ -1,0 +1,340 @@
+import 'dart:async';
+import 'dart:math';
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const FlappyApp());
+}
+
+class FlappyApp extends StatelessWidget {
+  const FlappyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: GamePage(),
+    );
+  }
+}
+
+enum GameState { start, playing, gameOver }
+
+class GamePage extends StatefulWidget {
+  const GamePage({super.key});
+
+  @override
+  State<GamePage> createState() => _GamePageState();
+}
+
+class _GamePageState extends State<GamePage>
+    with SingleTickerProviderStateMixin {
+  late Timer gameLoop;
+
+  GameState state = GameState.start;
+
+  double birdY = 0;
+  double velocity = 0;
+
+  final double gravity = 0.6;
+  final double flapStrength = -10;
+
+  final double birdSize = 30;
+
+  double pipeWidth = 60;
+  double gapHeight = 150;
+
+  List<Pipe> pipes = [];
+
+  double gameSpeed = 2.5;
+
+  int score = 0;
+
+  final Random random = Random();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void startGame() {
+    pipes.clear();
+    score = 0;
+    birdY = 0;
+    velocity = 0;
+
+    pipes.add(createPipe(1.2));
+    pipes.add(createPipe(1.8));
+
+    state = GameState.playing;
+
+    gameLoop = Timer.periodic(const Duration(milliseconds: 16), (timer) {
+      updateGame();
+    });
+  }
+
+  Pipe createPipe(double x) {
+    double gapY = random.nextDouble() * 0.6 - 0.3;
+    return Pipe(x, gapY);
+  }
+
+  void updateGame() {
+    setState(() {
+      velocity += gravity;
+      birdY += velocity * 0.1;
+
+      for (var pipe in pipes) {
+        pipe.x -= gameSpeed * 0.01;
+
+        // scoring
+        if (!pipe.passed && pipe.x < -0.1) {
+          pipe.passed = true;
+          score++;
+        }
+      }
+
+      // remove & add pipes
+      if (pipes.first.x < -1.5) {
+        pipes.removeAt(0);
+        pipes.add(createPipe(pipes.last.x + 0.6));
+      }
+
+      checkCollision();
+    });
+  }
+
+  void flap() {
+    if (state == GameState.playing) {
+      setState(() {
+        velocity = flapStrength;
+      });
+    } else if (state == GameState.start || state == GameState.gameOver) {
+      startGame();
+    }
+  }
+
+  void checkCollision() {
+    // ground & ceiling
+    if (birdY > 1 || birdY < -1) {
+      endGame();
+      return;
+    }
+
+    for (var pipe in pipes) {
+      double birdX = -0.2;
+
+      if ((pipe.x - pipeWidth / 300 < birdX &&
+          pipe.x + pipeWidth / 300 > birdX)) {
+        if (birdY < pipe.gapY - gapHeight / 300 ||
+            birdY > pipe.gapY + gapHeight / 300) {
+          endGame();
+        }
+      }
+    }
+  }
+
+  void endGame() {
+    state = GameState.gameOver;
+    gameLoop.cancel();
+  }
+
+  @override
+  void dispose() {
+    if (state == GameState.playing) {
+      gameLoop.cancel();
+    }
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: flap,
+      child: Scaffold(
+        backgroundColor: Colors.lightBlue,
+        body: Stack(
+          children: [
+            // Game world
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 0),
+              alignment: Alignment(0, birdY),
+              child: Bird(size: birdSize),
+            ),
+
+            ...pipes.map((pipe) => PipeWidget(pipe: pipe)),
+
+            // Score
+            Positioned(
+              top: 60,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: Text(
+                  "$score",
+                  style: const TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+
+            // Start / Game Over overlay
+            if (state != GameState.playing)
+              Center(
+                child: Text(
+                  state == GameState.start
+                      ? "TAP TO START"
+                      : "GAME OVER\nTap to restart",
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 28,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class Pipe {
+  double x;
+  double gapY;
+  bool passed = false;
+
+  Pipe(this.x, this.gapY);
+}
+
+class PipeWidget extends StatelessWidget {
+  final Pipe pipe;
+
+  const PipeWidget({super.key, required this.pipe});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        // Top pipe
+        Align(
+          alignment: Alignment(pipe.x, -1),
+          child: FractionallySizedBox(
+            widthFactor: 0.15,
+            heightFactor: (1 + pipe.gapY) / 2 - 0.2,
+            child: Container(color: Colors.green),
+          ),
+        ),
+
+        // Bottom pipe
+        Align(
+          alignment: Alignment(pipe.x, 1),
+          child: FractionallySizedBox(
+            widthFactor: 0.15,
+            heightFactor: (1 - pipe.gapY) / 2 - 0.2,
+            child: Container(color: Colors.green),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class Bird extends StatefulWidget {
+  final double size;
+
+  const Bird({super.key, required this.size});
+
+  @override
+  State<Bird> createState() => _BirdState();
+}
+
+class _BirdState extends State<Bird>
+    with SingleTickerProviderStateMixin {
+  late AnimationController controller;
+
+  @override
+  void initState() {
+    controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    )..repeat(reverse: true);
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: controller,
+      builder: (context, child) {
+        return Transform.rotate(
+          angle: sin(controller.value * pi) * 0.2,
+          child: CustomPaint(
+            size: Size(widget.size, widget.size),
+            painter: BirdPainter(controller.value),
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+}
+
+class BirdPainter extends CustomPainter {
+  final double flap;
+
+  BirdPainter(this.flap);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..color = Colors.yellow;
+
+    // Body
+    canvas.drawOval(
+      Rect.fromLTWH(0, 0, size.width, size.height),
+      paint,
+    );
+
+    // Wing animation
+    final wingPaint = Paint()..color = Colors.orange;
+
+    double wingY = size.height / 2 + sin(flap * pi) * 10;
+
+    canvas.drawOval(
+      Rect.fromLTWH(
+        size.width * 0.2,
+        wingY,
+        size.width * 0.6,
+        size.height * 0.3,
+      ),
+      wingPaint,
+    );
+
+    // Eye
+    final eyePaint = Paint()..color = Colors.white;
+    canvas.drawCircle(
+      Offset(size.width * 0.7, size.height * 0.3),
+      4,
+      eyePaint,
+    );
+
+    final pupilPaint = Paint()..color = Colors.black;
+    canvas.drawCircle(
+      Offset(size.width * 0.75, size.height * 0.3),
+      2,
+      pupilPaint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+}

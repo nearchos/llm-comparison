@@ -1,0 +1,13 @@
+name: flappy_bird_flutter
+description: A Flutter Flappy Bird clone
+publish_to: 'none'
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
