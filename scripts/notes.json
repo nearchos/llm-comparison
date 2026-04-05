@@ -34,7 +34,11 @@
             "The resulting project is still not running as a 'Color' object is used in.an instance where a 'Paint' is expected.",
             "Replacing the 'Color' with a 'Paint' object fixes this issue."
         ],
-        "claude": [],
+        "claude": [
+            "The code does not compile because of a type mismatch ('Shader' can't be assigned to the parameter type 'Paint').",
+            "The issue is fixed by creating a 'Paint' object and assigning the shader to it.",
+            "The resulting project is not functional: the player loses as soon as the game starts, with no opportunity for reacting."
+        ],
         "deepseek": [
             "DeepSeek does not guide you to create a project, but simply a main.dart containing the game code.",
             "Manual action used: 'flutter create flappy_deepseek_prompt'"

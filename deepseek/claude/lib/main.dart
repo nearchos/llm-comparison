@@ -483,8 +483,9 @@ class GamePainter extends CustomPainter {
       end: Alignment.bottomCenter,
       colors: const [Color(0xFF87CEEB), Color(0xFF6BB5D9)],
     );
-    canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), 
-                    skyGradient.createShader(Rect.fromLTWH(0, 0, size.width, size.height)));
+    final skyPaint = Paint()
+      ..shader = skyGradient.createShader(Rect.fromLTWH(0, 0, size.width, size.height));
+    canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), skyPaint);
     
     // Draw clouds (simple decorative)
     _drawCloud(canvas, 50, 80, 60);
