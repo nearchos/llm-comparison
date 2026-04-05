@@ -1,0 +1,21 @@
+name: flappy_bird_clone
+description: A complete Flappy Bird clone built with native Flutter
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # For sound effects (optional - comment out if not needed)
+  audioplayers: ^5.2.1
+
+flutter:
+  uses-material-design: true
+  
+  # Uncomment if you want to add sound assets
+  # assets:
+  #   - assets/sounds/
