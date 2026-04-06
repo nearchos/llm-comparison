@@ -1,0 +1,24 @@
+Now I'll build the complete Flutter project. Let me create all files:Verified project structure before presenting complete filesVerified project structure before presenting complete filesNow let me verify the project structure is clean and check for any issues:Ran 5 commands, read a fileRan 5 commands, read a fileHere's the complete project — zero external dependencies, pure Flutter SDK. Here's a breakdown of every design decision:
+
+Project Structure
+flappy_bird/
+├── pubspec.yaml           ← flutter SDK only, no third-party packages
+└── lib/
+    ├── main.dart          ← App entry; locks portrait + full-screen immersive
+    ├── models.dart        ← GameState enum, PipePair, Cloud data classes
+    ├── game_screen.dart   ← StatefulWidget + game loop + physics
+    └── game_painter.dart  ← CustomPainter: ALL rendering lives here
+
+Key Implementation Details
+Game loop — uses AnimationController.repeat() with TickerProviderStateMixin. Delta-time is computed from lastElapsedDuration (clamped to 50 ms to survive backgrounding) and passed to each physics/scroll function.
+Bird physics — classic Euler integration: velocity += gravity × dt, y += velocity × dt. Tap applies an instant −530 px/s impulse. Rotation maps velocity linearly to radians (nose-up on flap, nose-down in freefall).
+Flapping animation — a flapProgress float (0→1 cycle) advances at ~2.85 Hz. The wing is a separate oval whose Y offset is driven by sin(flapProgress × 2π), so it oscillates naturally.
+Collision — a 14 px circular hitbox centred on the bird sprite (slightly inside the visual edge for forgiving feel). Broad-phase horizontal check first, then gap check, then hit.
+Pipes — randomly positioned gap with configurable margins so the gap never hugs the ceiling or ground. A scored flag prevents double-counting.
+Rendering — entirely CustomPainter with Canvas primitives: drawRect, drawOval, drawPath, TextPainter. No image assets needed.
+Parallax clouds — three speed layers (18%, 30%, 42% of pipe speed) wrap around automatically.
+
+To Run
+bashcd flappy_bird
+flutter pub get
+flutter runMainCode · DART DownloadGame screenCode · DART DownloadGame painterCode · DART DownloadModelsCode · DART DownloadPubspecYAML DownloadDownload all
