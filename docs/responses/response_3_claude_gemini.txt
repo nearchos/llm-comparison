@@ -1,0 +1,26 @@
+ere's your complete Flappy Bird clone — polished, physics-tuned, and ready to paste straight into lib/main.dart:Created a file, read a fileCreated a file, read a fileDrop main.dart into a fresh Flutter project's lib/ folder and run — no pubspec.yaml changes needed.
+Here's what's packed into it:
+Physics & Game Loop
+
+Timer.periodic at ~60fps (16ms ticks)
+Gravity accumulates each frame; tap fires an instant velocity impulse
+Bird rotation angle clamps between -45° (climbing) and +90° (nosediving)
+
+Graphics (pure CustomPainter / widgets)
+
+Bird — gradient oval body, wing bezier, layered eye with shine, triangular beak
+Pipes — linear gradient green with a wider cap and a shadow stripe for depth
+Ground — scrolling striped grass on a dirt base using the ground offset counter
+Clouds — three overlapping ovals at fixed decorative positions
+
+Collision & Scoring
+
+Pixel-precise AABB collision with a small forgiveness margin (6px) so it feels fair
+Score increments when the bird's center X crosses a pipe center (one-shot flag via an extension map)
+Best score tracked across restarts in the same session
+
+UI States
+
+Idle — title card + pulsing animated "TAP TO START" button
+Playing — large outlined score counter at top
+Dead — frosted card overlay with SCORE / BEST side-by-side + pulsing restart hint

@@ -35,8 +35,17 @@
             "The generated code uses a type Ticker which is not defined (Type 'Ticker' not found)",
             "The resulting project is not functional: the gameplay is rather difficult for a beginner."
         ],
-        "deepseek": [],
-        "gemini": [],
+        "deepseek": [
+        ],
+        "gemini": [
+            "Provided source code (main.dart) and no instructions.",
+            "Does not compile (Error: Not a constant expression).",
+            "Changing the const to final fixes this issue.",
+            "The resulting game is functional with a good gameplay",
+            "The game ends as soon as the player passes the first obstacle and thge obstacle scrolls out of view. At that point the game freezes and there is no button to start over.",
+            "The game graphics are quite good. The clouds in the background are static though and do not create a parallax effect.",
+            "In terms of branding the starting screen shows a blue bird which is not similar to the original Flappy Bird and may create confusion."
+        ],
         "llama": []
     },
     "deepseek": {
