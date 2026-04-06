@@ -1,13 +1,15 @@
 # llm-comparison
 
-Describes an experiment where various LLMs are compared to assess their ability to generate functional apps
+Describes an experiment where various LLMs are compared to assess their ability to generate functional apps.
 
-A live page is automatically generated with code from [scripts/](scripts/), and is accessible at:
+A summary page is automatically generated with code from [scripts/](scripts/), and is accessible at:
 - [data.html](https://nearchos.github.io/llm-comparison/data.html)
 
+The versions of the 5 LLMs (chatgpot, claude, deepseek, gemini and llama) are described in [LLMs.txt](./LLMs.txt).
+
 Build Flutter projects using:
-- `flutter build web --base-href /live/<llm>/<prompt-llm>/`
-- for example: `flutter build web --base-href /llm-comparison/live/chatgpt/chatgpt/`
+- `flutter build web --base-href /live/<llm-which-creates-the-code>/<llm-which-formed-the-prompt>`
+- for example: `flutter build web --base-href /llm-comparison/live/chatgpt/llama/`
 
 For each variation `<llm-which-creates-the-code>`/`<llm-which-formed-the-prompt>` we list the following:
 1. The LLM's response
