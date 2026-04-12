@@ -1,4 +1,5 @@
-DoneHere's a comprehensive prompt designed to generate a complete, working Flappy Bird clone:
+Done
+Here's a comprehensive prompt designed to generate a complete, working Flappy Bird clone:
 
 PROMPT:
 Create a complete, fully functional Flappy Bird clone in Flutter that can be compiled and run immediately without any manual modifications. Follow these requirements strictly:

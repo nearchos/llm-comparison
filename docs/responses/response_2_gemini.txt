@@ -44,12 +44,3 @@ Use a Stack to layer the background, bird, pipes, and UI.
 Ensure variables (bird Y position, velocity, pipe list) are initialized properly to avoid null errors.
 
 Output: Provide only the full Dart code in a single code block.
-
-Why this prompt works (Analysis of Objectives)
-Objective 1 (Completeness): By explicitly asking for a Single File and forbidding pubspec.yaml changes, we bypass the most common failure point in LLM code generation (dependency management).
-
-Objective 2 (Native Widgets): Specifying Stack and Positioned forces the LLM to use the layout system it understands best, rather than hallucinating APIs for complex game engines.
-
-Objective 3 & 4 (Gameplay/Graphics): We define the Bird and Pipes as colored Containers. This is visually close enough to the original (pixel art style) but mathematically simple to render.
-
-Logic (Game Loop): Explicitly requesting Timer.periodic prevents the LLM from trying to use complex AnimationControllers for the game loop, which can get desynchronized easily in simple games.
