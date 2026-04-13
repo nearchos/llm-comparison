@@ -1,4 +1,4 @@
-ere's your complete Flappy Bird clone — polished, physics-tuned, and ready to paste straight into lib/main.dart:Created a file, read a fileCreated a file, read a fileDrop main.dart into a fresh Flutter project's lib/ folder and run — no pubspec.yaml changes needed.
+Here's your complete Flappy Bird clone — polished, physics-tuned, and ready to paste straight into lib/main.dart:Created a file, read a fileCreated a file, read a fileDrop main.dart into a fresh Flutter project's lib/ folder and run — no pubspec.yaml changes needed.
 Here's what's packed into it:
 Physics & Game Loop
 
