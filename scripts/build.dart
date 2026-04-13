@@ -78,7 +78,7 @@ Future<void> main() async {
             prompt_row = prompt_row.replaceAll("%screenshot%", screenshotHtml);
 
             var notesList = notes[llm_id][prompt['id']];
-            var notesHtml = notesList != null ? "<ol>" + notesList.map((note) => "<li><div data-tooltip=\"$note\">${shorten(note)}</div></li>").join("\n") + "</ol>" : "&empty;";
+            var notesHtml = notesList != null ? "<ul>" + notesList.map((note) => "<li><div data-tooltip=\"$note\">${shorten(note)}</div></li>").join("\n") + "</ul>" : "&empty;";
             prompt_row = prompt_row.replaceAll("%notes%", notesHtml);
 
             var liveGameHtml = response3PathExists ?

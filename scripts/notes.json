@@ -5,7 +5,6 @@
             "3.a- The resulting project is not functional: the player loses as soon as the game starts, with no opportunity for reacting."
         ],
         "claude": [
-            "1.b+ Provides accurate guidelines for creating a flutter project and integrating the genetrated code.",
             "3.a- The resulting project is not functional: the player loses as soon as the game starts, with no opportunity for reacting."
         ],
         "deepseek": [
@@ -29,12 +28,10 @@
             "3.d- The game is playable but with high difficulty."
         ],
         "claude": [
-            "1.b+ Provides accurate guidelines for creating a flutter project and integrating the genetrated code.",
             "2.b- The code does not compile - uses a type Ticker which is not defined (Type 'Ticker' not found)",
             "3.d- The game is playable but with high difficulty."
         ],
         "deepseek": [
-            "1.b+ Provides accurate guidelines for creating a flutter project and integrating the genetrated code.",
             "3.d- The game is playable but with high difficulty."
         ],
         "gemini": [
@@ -54,7 +51,6 @@
     },
     "deepseek": {
         "chatgpt": [
-            "1.b+ Provides accurate guidelines for creating a flutter project and integrating the genetrated code.",
             "2.b- The resulting project does not launch (Error: unable to locate asset entry in pubspec.yaml: assets/fonts/PixelFont.ttf.) [Fixing the code by removing the font declaration from pubspec.yaml]",
             "2.b- The resulting project still fails to run as dependencies are missing from some files (dart:ui) [Fixing the code by adding the dependency 'dart:ui' to the affected files fixes this issue.]",
             "2.b- The resulting project still fails to run ('Color' object is used in an instance where a 'Paint' is expected.) [Fixing the code by replacing the 'Color' with a 'Paint' object]",
@@ -84,7 +80,6 @@
     },
     "gemini": {
         "chatgpt": [
-            "1.b+ Provides accurate guidelines for creating a flutter project and integrating the genetrated code.",
             "3.d- The game is playable but with high difficulty."
         ],
         "claude": [
@@ -106,7 +101,6 @@
     },
     "llama": {
         "chatgpt": [
-            "1.b+ Provides accurate guidelines for creating a flutter project and integrating the genetrated code.",
             "2.a- The resulting project (flutter run) fails in runtime with no obvious resolution [Running the project in release mode (flutter run --release) allows it to launch]",
             "3.e- No animation, no gameplay."
         ],
@@ -121,12 +115,9 @@
         ],
         "gemini": [
             "1.a- Requires manual creation of a flutter project and copying the code into the main.dart file.",
-            "2.a- The resulting project (flutter run) fails in runtime with no obvious resolution [Running the project in release mode (flutter run --release) allows it to launch]",
-            "3.c- The game is playable but with trivial graphics.",
-            "3.e+ The resulting game is functional with a good gameplay"
+            "2.a- The resulting project (flutter run) fails in runtime with no obvious resolution [Running the project in release mode (flutter run --release) allows it to launch]"
         ],
         "llama": [
-            "1.b+ Provides accurate guidelines for creating a flutter project and integrating the genetrated code.",
             "3.e- No animation, no gameplay (the game ends as soon as it launches before you can even tap to start)"
         ]
     }
