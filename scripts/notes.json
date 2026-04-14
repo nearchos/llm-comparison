@@ -37,16 +37,15 @@
         "gemini": [
             "1.a- Requires manual creation of a flutter project and copying the code into the main.dart file.",
             "2.c- The code does not compile - uses a non-constant expression (Error: Not a constant expression) [Changing the const to final fixes this issue]",
-            "3.e+ The resulting game is functional with a good gameplay",
-            "3.f- The game ends as soon as the player passes the first obstacle and the obstacle scrolls out of view. At that point the game freezes and there is no button to start over.",
-            "3.g+ The game graphics are quite good.",
-            "3.h- In terms of branding the starting screen shows a blue bird which is not similar to the original Flappy Bird and may create confusion."
+            "3.e- The resulting game is functional with a good gameplay but it ends as soon as the player passes the first obstacle.",
+            "3.f+ The game graphics are good.",
+            "3.g- In terms of branding the starting screen shows a blue bird which is not similar to the original Flappy Bird and may create confusion."
         ],
         "llama": [
             "1.a- Requires manual creation of a flutter project and copying the code into the main.dart file.",
             "2.d- The code does not compile (Error when reading 'lib/game_screen.dart': No such file or directory) [Fixing the code by importing the file from the correct path allows the project to compile]",
-            "3.e+ The resulting game is functional with a good gameplay",
-            "3.i- The game is quite difficult for a beginner (the pipes are positioned very close to each other)"
+            "3.h+ The resulting game is functional with a good gameplay.",
+            "3.i- The game is quite difficult for a beginner (the pipes are positioned very close to each other)."
         ]
     },
     "deepseek": {
@@ -60,7 +59,7 @@
             "1.a- Requires manual creation of a flutter project and copying the code into the main.dart file.",
             "2.h- The code does not compile because of a type mismatch ('Shader' can't be assigned to the parameter type 'Paint') [Fixing the code by creating a 'Paint' object and assigning the shader to it]",
             "3.a- The resulting project is not functional: the player loses as soon as the game starts, with no opportunity for reacting.",
-            "3.e- No animation, no gameplay."
+            "3.j- No animation, no gameplay."
         ],
         "deepseek": [
             "1.a- Requires manual creation of a flutter project and copying the code into the main.dart file.",
@@ -69,12 +68,12 @@
         "gemini": [
             "1.a- Requires manual creation of a flutter project and copying the code into the main.dart file.",
             "2.a- The resulting project (flutter run) fails in runtime with no obvious resolution [Running the project in release mode (flutter run --release) allows it to launch]",
-            "3.f- No graphics, no gameplay"
+            "3.k- No graphics, no gameplay."
         ],
         "llama": [
             "2.i- The code does not compile (The argument type 'int' can't be assigned to the parameter type 'double) [Fixing the code with a cast allows the app to launch]",
             "3.i- The game is quite difficult for a beginner (the pipes are positioned very close to each other)",
-            "3.g- Even though the graphics are better than trivial, the background clouds creating the parallax effect move in the wrong direction (left to right instead of right to left)."
+            "3.l- Even though the graphics are better than trivial, the background clouds creating the parallax effect move in the wrong direction (left to right instead of right to left)."
         ]
     },
     "gemini": {
@@ -88,35 +87,35 @@
         "deepseek": [
             "1.a- Requires manual creation of a flutter project and copying the code into the main.dart file.",
             "3.d- The game is playable but with high difficulty.",
-            "3.h- The resulting gameplay is faulty as the bird can go through the pipes without colliding with them."],
+            "3.m- The resulting gameplay is faulty as the bird can go through the pipes without colliding with them."],
         "gemini": [
-            "3.d- The game is playable but with high difficulty (the terrain moves too fast and the bird is quite difficult to control)."
+            "3.n- The game is playable but with high difficulty (the terrain moves too fast and the bird is quite difficult to control)."
         ],
         "llama": [
             "1.a- Requires manual creation of a flutter project and copying the code into the main.dart file.",
-            "3.d- The game is playable but with high difficulty (the terrain moves too fast and the bird is quite difficult to control)."
+            "3.n- The game is playable but with high difficulty (the terrain moves too fast and the bird is quite difficult to control)."
         ]
     },
     "llama": {
         "chatgpt": [
             "2.a- The resulting project (flutter run) fails in runtime with no obvious resolution [Running the project in release mode (flutter run --release) allows it to launch]",
-            "3.e- No animation, no gameplay."
+            "3.j- No animation, no gameplay."
         ],
         "claude": [
             "1.a- Requires manual creation of a flutter project and copying the code into the main.dart file.",
             "2.a- The resulting project (flutter run) fails in runtime with no obvious resolution [Running the project in release mode (flutter run --release) allows it to launch]",
-            "3.e- No animation, no gameplay (the game ends as soon as you tap to start)"
+            "3.j- No animation, no gameplay (the game ends as soon as you tap to start)"
         ],
         "deepseek": [
             "1.a- Requires manual creation of a flutter project and copying the code into the main.dart file.",
-            "3.d- The game is playable but with impossible difficulty (the pipes are too close to each other and the bird is difficult to control)."
+            "3.n- The game is playable but with impossible difficulty (the pipes are too close to each other and the bird is difficult to control)."
         ],
         "gemini": [
             "1.a- Requires manual creation of a flutter project and copying the code into the main.dart file.",
             "2.a- The resulting project (flutter run) fails in runtime with no obvious resolution [Running the project in release mode (flutter run --release) allows it to launch]"
         ],
         "llama": [
-            "3.e- No animation, no gameplay (the game ends as soon as it launches before you can even tap to start)"
+            "3.j- No animation, no gameplay (the game ends as soon as it launches before you can even tap to start)"
         ]
     }
 }
